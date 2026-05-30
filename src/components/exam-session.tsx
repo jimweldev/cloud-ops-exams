@@ -334,9 +334,13 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
 
           let style =
             "bg-muted text-muted-foreground hover:bg-muted-foreground/20"
-          if (isCurrent) {
+          if (isCurrent && answered) {
+            style = wasCorrect
+              ? "ring-2 ring-primary bg-green-600 text-white font-bold"
+              : "ring-2 ring-primary bg-destructive text-white font-bold"
+          } else if (isCurrent) {
             style =
-              "ring-2 ring-primary bg-background text-foreground font-bold"
+              "ring-2 ring-primary text-foreground font-bold"
           } else if (answered) {
             style = wasCorrect
               ? "bg-green-600 text-white"
