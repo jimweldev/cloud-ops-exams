@@ -240,7 +240,7 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
 
       {/* Question text — flat, no card */}
       <div className="space-y-2">
-        <h2 className="text-lg font-semibold leading-relaxed">
+        <h2 className="text-lg leading-relaxed font-semibold">
           {displayQuestion}
         </h2>
         <p className="text-sm text-muted-foreground">
@@ -339,8 +339,7 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
               ? "ring-2 ring-primary bg-green-600 text-white font-bold"
               : "ring-2 ring-primary bg-destructive text-white font-bold"
           } else if (isCurrent) {
-            style =
-              "ring-2 ring-primary text-foreground font-bold"
+            style = "ring-2 ring-primary bg-muted text-foreground font-bold"
           } else if (answered) {
             style = wasCorrect
               ? "bg-green-600 text-white"
