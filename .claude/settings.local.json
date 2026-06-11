@@ -17,7 +17,10 @@
       "Bash(node -e \"const q = JSON.parse\\(require\\('fs'\\).readFileSync\\('docs/exams/exam-3.json','utf-8'\\)\\); [3,12,14,16,18,26,40].forEach\\(n => { const item = q.find\\(x=>x.id===n\\); console.log\\('--- Q'+n+' \\('+item.choices.length+' choices\\) ---'\\); item.choices.forEach\\(\\(c,i\\) => console.log\\('  '+\\(i+1\\)+'. '+c.slice\\(0,90\\)\\)\\); console.log\\('  Correct:', item.correctAnswers.map\\(a=>a.slice\\(0,60\\)\\)\\); console.log\\(\\); }\\)\")",
       "Bash(node -e \"try{console.log\\(require\\('./package.json'\\).type||'commonjs'\\)}catch\\(e\\){console.log\\('no package.json'\\)}\")",
       "Bash(node scripts/convert-exam.mjs)",
-      "Bash(node -e ' *)"
+      "Bash(node -e ' *)",
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\Jimwel\\\\Desktop\\\\Projects\\\\Personal\\\\aws-cloud-ops\\\\src\" -Recurse | Where-Object {!$_.PSIsContainer} | Select-Object FullName | Sort-Object FullName)",
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\Jimwel\\\\Desktop\\\\Projects\\\\Personal\\\\aws-cloud-ops\\\\docs\" -Recurse | Where-Object {!$_.PSIsContainer} | Select-Object FullName)",
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\Jimwel\\\\Desktop\\\\Projects\\\\Personal\\\\aws-cloud-ops\\\\scripts\" -Recurse | Where-Object {!$_.PSIsContainer} | Select-Object FullName)"
     ]
   }
 }
