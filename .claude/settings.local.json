@@ -3,7 +3,21 @@
     "allow": [
       "Bash(npx shadcn@latest:*)",
       "Bash(npx tsc:*)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(Get-Content \"C:\\\\Users\\\\Jimwel\\\\Desktop\\\\Projects\\\\Personal\\\\aws-cloud-ops\\\\docs\\\\exams\\\\exam-3.txt\")",
+      "Bash(Measure-Object -Line)",
+      "Bash(Get-Content \"C:\\\\Users\\\\Jimwel\\\\Desktop\\\\Projects\\\\Personal\\\\aws-cloud-ops\\\\docs\\\\exams\\\\exam-4.txt\")",
+      "Bash(Get-Content \"C:\\\\Users\\\\Jimwel\\\\Desktop\\\\Projects\\\\Personal\\\\aws-cloud-ops\\\\docs\\\\exams\\\\exam-5.txt\")",
+      "Bash(Get-Content \"C:\\\\Users\\\\Jimwel\\\\Desktop\\\\Projects\\\\Personal\\\\aws-cloud-ops\\\\docs\\\\exams\\\\exam-6.txt\")",
+      "Bash(Get-Content \"C:\\\\Users\\\\Jimwel\\\\Desktop\\\\Projects\\\\Personal\\\\aws-cloud-ops\\\\docs\\\\exams\\\\exam-7.txt\")",
+      "PowerShell(\\(Get-Content \"docs\\\\exams\\\\exam-3.txt\"\\).Count; \\(Get-Content \"docs\\\\exams\\\\exam-4.txt\"\\).Count; \\(Get-Content \"docs\\\\exams\\\\exam-5.txt\"\\).Count; \\(Get-Content \"docs\\\\exams\\\\exam-6.txt\"\\).Count; \\(Get-Content \"docs\\\\exams\\\\exam-7.txt\"\\).Count)",
+      "Bash(node scripts/parse-exam.js docs/exams/exam-3.txt docs/exams/exam-3.json)",
+      "Bash(node scripts/parse-exam.cjs docs/exams/exam-3.txt docs/exams/exam-3.json)",
+      "Bash(node -e \"const q = JSON.parse\\(require\\('fs'\\).readFileSync\\('docs/exams/exam-3.json','utf-8'\\)\\); [1,3,12,14,26].forEach\\(n => { const item = q.find\\(x=>x.id===n\\); console.log\\('--- Q'+n+' ---'\\); console.log\\('Q:', item.question.slice\\(0,80\\)\\); console.log\\('Choices:', item.choices\\); console.log\\('Correct:', item.correctAnswers\\); console.log\\(\\); }\\)\")",
+      "Bash(node -e \"const q = JSON.parse\\(require\\('fs'\\).readFileSync\\('docs/exams/exam-3.json','utf-8'\\)\\); [3,12,14,16,18,26,40].forEach\\(n => { const item = q.find\\(x=>x.id===n\\); console.log\\('--- Q'+n+' \\('+item.choices.length+' choices\\) ---'\\); item.choices.forEach\\(\\(c,i\\) => console.log\\('  '+\\(i+1\\)+'. '+c.slice\\(0,90\\)\\)\\); console.log\\('  Correct:', item.correctAnswers.map\\(a=>a.slice\\(0,60\\)\\)\\); console.log\\(\\); }\\)\")",
+      "Bash(node -e \"try{console.log\\(require\\('./package.json'\\).type||'commonjs'\\)}catch\\(e\\){console.log\\('no package.json'\\)}\")",
+      "Bash(node scripts/convert-exam.mjs)",
+      "Bash(node -e ' *)"
     ]
   }
 }

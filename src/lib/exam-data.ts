@@ -6,7 +6,10 @@ const examModules = import.meta.glob("/docs/exams/*.json", {
 }) as Record<string, ExamData>
 
 export function loadExams(): ExamData[] {
-  return Object.values(examModules).sort((a, b) =>
-    a.title.localeCompare(b.title)
-  )
+  return Object.values(examModules)
+    .filter(
+      (exam): exam is ExamData =>
+        !!exam && typeof exam.title === "string" && Array.isArray(exam.questions)
+    )
+    .sort((a, b) => a.title.localeCompare(b.title))
 }
