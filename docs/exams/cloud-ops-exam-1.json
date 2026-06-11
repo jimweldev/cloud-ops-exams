@@ -27,9 +27,7 @@
         "CombinedStatusCheckFailed",
         "StatusCheckFailed_System"
       ],
-      "correctAnswers": [
-        "StatusCheckFailed"
-      ],
+      "correctAnswers": ["StatusCheckFailed"],
       "explanation": "The AWS/EC2 namespace includes a few status check metrics. StatusCheckFailed reports whether the instance has passed both the instance status check and the system status check in the last minute. This metric can be either 0 (passed) or 1 (failed). By default, this metric is available at a 1-minute frequency at no charge."
     },
     {
@@ -59,9 +57,7 @@
         "CloudTrail logs",
         "Load Balancer Request tracing"
       ],
-      "correctAnswers": [
-        "CloudTrail logs"
-      ],
+      "correctAnswers": ["CloudTrail logs"],
       "explanation": "Elastic Load Balancing is integrated with AWS CloudTrail, a service that provides a record of actions taken by a user, role, or an AWS service in Elastic Load Balancing. CloudTrail captures all API calls for Elastic Load Balancing as events, including calls from the AWS Management Console and code calls to the API operations."
     },
     {
@@ -200,9 +196,7 @@
         "Use S3 transfer acceleration",
         "Use Volume Gateway"
       ],
-      "correctAnswers": [
-        "Use Snowball Edge"
-      ],
+      "correctAnswers": ["Use Snowball Edge"],
       "explanation": "Snowball Edge Storage Optimized is the optimal choice if you need to securely and quickly transfer dozens of terabytes to petabytes of data to AWS. It provides up to 80 TB of usable HDD storage, 40 vCPUs, 1 TB of SATA SSD storage, and up to 40 Gb network connectivity to address large scale data transfer and pre-processing use cases."
     },
     {
@@ -232,9 +226,7 @@
         "Use the following S3 bucket policy: {\"Statement\":[{\"Action\": \"s3:*\",\"Effect\":\"Deny\",\"Principal\": \"*\",\"Resource\":\"arn:aws:s3:::bucketname/*\",\"Condition\":{\"Bool\":{ \"aws:SecureTransport\": false }}}]}",
         "Using the \"Default Encryption\" setting in AWS S3"
       ],
-      "correctAnswers": [
-        "Using the \"Default Encryption\" setting in AWS S3"
-      ],
+      "correctAnswers": ["Using the \"Default Encryption\" setting in AWS S3"],
       "explanation": "Amazon S3 default encryption provides a way to set the default encryption behavior for an S3 bucket. You can set default encryption on a bucket so that all new objects are encrypted when they are stored in the bucket. The objects are encrypted using server-side encryption with either Amazon S3-managed keys (SSE-S3) or KMS keys stored in AWS KMS."
     },
     {
@@ -247,9 +239,7 @@
         "Enable termination protection",
         "Use DeletionPolicy=Snapshot"
       ],
-      "correctAnswers": [
-        "Use DeletionPolicy=Snapshot"
-      ],
+      "correctAnswers": ["Use DeletionPolicy=Snapshot"],
       "explanation": "To control how AWS CloudFormation handles the EBS volume when the stack is deleted, set a deletion policy for your volume. Using DeletionPolicy: Snapshot ensures a snapshot of the volume is created before the stack is deleted."
     },
     {
@@ -337,9 +327,7 @@
         "Generate pre-signed URLs for your reports",
         "Make the S3 bucket public and password protect each S3 file. Share the password with each customer"
       ],
-      "correctAnswers": [
-        "Generate pre-signed URLs for your reports"
-      ],
+      "correctAnswers": ["Generate pre-signed URLs for your reports"],
       "explanation": "A presigned URL gives you access to the object identified in the URL, provided that the creator of the presigned URL has permissions to access that object. The object owner can share objects with others by creating a presigned URL, using their own security credentials, to grant time-limited permission to download the objects."
     },
     {
@@ -352,9 +340,7 @@
         "Enable S3 access logs and analyze using Athena",
         "Enable S3 access logs and analyze using Inspector"
       ],
-      "correctAnswers": [
-        "Analyze the CloudFront access logs using Athena"
-      ],
+      "correctAnswers": ["Analyze the CloudFront access logs using Athena"],
       "explanation": "You can configure CloudFront to create access log files that contain detailed information about every user request. AWS recommends that you use these logs to understand the nature of the requests for your content. Amazon Athena is an interactive query service that makes it easy to analyze data directly in Amazon S3 using standard SQL."
     },
     {
@@ -480,9 +466,7 @@
         "Subscribe to CloudWatch metrics that track CPU utilization of the instances the RDS is hosted on",
         "Subscribe to Amazon RDS events to be notified when changes occur with a DB instance and its connected resources"
       ],
-      "correctAnswers": [
-        "Enable Enhanced Monitoring for your RDS DB instance"
-      ],
+      "correctAnswers": ["Enable Enhanced Monitoring for your RDS DB instance"],
       "explanation": "Amazon RDS provides metrics in real time for the operating system (OS) that your DB instance runs on through Enhanced Monitoring. Enhanced Monitoring metrics are useful when you want to see how different processes or threads on a DB instance use the CPU. These metrics are ingested by Amazon CloudWatch Logs as log entries."
     },
     {
@@ -510,9 +494,7 @@
         "Set OnFailure=DO_NOTHING",
         "Enable VPC Flow Logs and intercept the cfn-init log file"
       ],
-      "correctAnswers": [
-        "Set OnFailure=DO_NOTHING"
-      ],
+      "correctAnswers": ["Set OnFailure=DO_NOTHING"],
       "explanation": "You can use the OnFailure property of the CloudFormation CreateStack call for this use-case. Setting OnFailure=DO_NOTHING will prevent the termination of the EC2 instances created by the CloudFormation stack, allowing you to access the log files for debugging."
     },
     {
@@ -623,9 +605,7 @@
         "Create an RDS Read Replica for the ETL team",
         "Upgrade the RDS instance type"
       ],
-      "correctAnswers": [
-        "Create an RDS Read Replica for the ETL team"
-      ],
+      "correctAnswers": ["Create an RDS Read Replica for the ETL team"],
       "explanation": "RDS Read Replicas make it easy to elastically scale out beyond the capacity constraints of a single DB instance for read-heavy workloads. For this use-case, you can use a read replica as the source for the ETL process, offloading the read traffic from the primary production database."
     },
     {
@@ -683,9 +663,7 @@
         "Volume Gateway of AWS Storage Gateway",
         "File Gateway of AWS Storage Gateway"
       ],
-      "correctAnswers": [
-        "File Gateway of AWS Storage Gateway"
-      ],
+      "correctAnswers": ["File Gateway of AWS Storage Gateway"],
       "explanation": "File Gateway presents a file-based interface to Amazon S3, appearing as a network file share. It enables you to store and retrieve Amazon S3 objects through standard file storage protocols (NFS or SMB). This provides low-latency performance by caching frequently accessed data on-premises, while storing data securely and durably in the cloud."
     },
     {
@@ -743,9 +721,7 @@
         "DiskReadBytes and DiskWriteBytes",
         "NetworkIn and NetworkOut"
       ],
-      "correctAnswers": [
-        "NetworkIn and NetworkOut"
-      ],
+      "correctAnswers": ["NetworkIn and NetworkOut"],
       "explanation": "NetworkIn is the number of bytes received by the instance on all network interfaces. NetworkOut is the number of bytes sent out by the instance on all network interfaces. By aggregating these metrics over a date range, you can calculate total network usage and identify the instance with the highest bandwidth consumption."
     },
     {
@@ -758,9 +734,7 @@
         "Opt for Amazon EC2 Dedicated Instance",
         "Opt for On-Demand instances that are highly available and require no prior planning"
       ],
-      "correctAnswers": [
-        "Opt for Amazon EC2 Dedicated Host"
-      ],
+      "correctAnswers": ["Opt for Amazon EC2 Dedicated Host"],
       "explanation": "An Amazon EC2 Dedicated Host is a physical server fully dedicated to your use. Dedicated Hosts allow you to use your existing per-socket, per-core, or per-VM software licenses, which is necessary for software that requires socket-level configurations."
     },
     {
@@ -850,9 +824,7 @@
         "Enable RDS Multi-AZ",
         "Setup a CloudWatch alarm for DB RAM going over 90% and reboot the database then"
       ],
-      "correctAnswers": [
-        "Enable RDS Multi-AZ"
-      ],
+      "correctAnswers": ["Enable RDS Multi-AZ"],
       "explanation": "RDS Multi-AZ deployments provide high availability and automatic failover. In a Multi-AZ deployment, RDS automatically provisions and maintains a synchronous standby replica in a different Availability Zone. If the primary instance fails, RDS automatically fails over to the standby without losing committed transactions."
     },
     {
@@ -897,9 +869,7 @@
         "Using the root account and the AWS CLI",
         "Using an admin IAM user and the AWS CLI"
       ],
-      "correctAnswers": [
-        "Using the root account and the AWS CLI"
-      ],
+      "correctAnswers": ["Using the root account and the AWS CLI"],
       "explanation": "Only the bucket owner (root account) can enable MFA Delete, and it can only be enabled via the AWS CLI (or API). It cannot be enabled through the AWS Management Console."
     },
     {
@@ -927,9 +897,7 @@
         "Enable SSL connections from the RDS Console",
         "Edit the security group rules"
       ],
-      "correctAnswers": [
-        "Review the DB parameter groups"
-      ],
+      "correctAnswers": ["Review the DB parameter groups"],
       "explanation": "You can enforce all connections to your RDS for PostgreSQL database instance to use SSL by enabling the rds.force_ssl parameter in the DB parameter group. This parameter is set to \"0\" (off) by default and must be changed to \"1\"."
     },
     {
@@ -942,24 +910,15 @@
         "Create the AMI with No reboot option enabled",
         "Create the AMI with Delete on termination enabled"
       ],
-      "correctAnswers": [
-        "Create the AMI by disabling the No reboot option"
-      ],
+      "correctAnswers": ["Create the AMI by disabling the No reboot option"],
       "explanation": "By default (with \"No reboot\" option disabled), Amazon EC2 shuts down the instance, takes snapshots of any attached volumes, creates the AMI, and then reboots the instance. This ensures all operating system buffers are flushed to disk, resulting in an application-consistent AMI."
     },
     {
       "number": 62,
       "question": "You would like to replace your on-premise NFS v3 drive with something that will leverage the huge capacity of Amazon S3. You would like to ensure files that are commonly used are locally cached on-premises.\n\nWhat should you use?",
       "simplifiedQuestion": "Which AWS service replaces an on-premises NFS drive with S3 storage and local caching?",
-      "choices": [
-        "EBS Drives",
-        "Volume Gateway",
-        "EFS",
-        "File Gateway"
-      ],
-      "correctAnswers": [
-        "File Gateway"
-      ],
+      "choices": ["EBS Drives", "Volume Gateway", "EFS", "File Gateway"],
+      "correctAnswers": ["File Gateway"],
       "explanation": "File Gateway provides a seamless way to connect to the cloud to store application data files as durable objects in Amazon S3. It offers SMB or NFS-based access to data in Amazon S3 with local caching. This makes it an ideal replacement for an on-premise NFS drive, leveraging S3's capacity while maintaining low-latency access to frequently used files via local cache."
     },
     {
@@ -972,9 +931,7 @@
         "Enable S3 Access Logs and analyze them using Athena",
         "Use a bucket policy"
       ],
-      "correctAnswers": [
-        "Enable S3 Access Logs and analyze them using Athena"
-      ],
+      "correctAnswers": ["Enable S3 Access Logs and analyze them using Athena"],
       "explanation": "Server access logging provides detailed records for the requests that are made to an S3 bucket. Each access log record provides details like the requester, request time, request action, and response status (e.g., 403 Access Denied). You can enable these logs and use Amazon Athena to query them and analyze access patterns for specific employees."
     },
     {
@@ -987,9 +944,7 @@
         "You did not disable Rollbacks",
         "You forgot to include a deletion policy"
       ],
-      "correctAnswers": [
-        "You forgot the Wait Condition"
-      ],
+      "correctAnswers": ["You forgot the Wait Condition"],
       "explanation": "The cfn-signal script sends a signal to CloudFormation. To make CloudFormation wait for this signal before completing the stack creation, you must create a Wait Condition resource in your template. The Wait Condition pauses the stack creation until it receives the required number of success signals or the timeout period expires."
     },
     {

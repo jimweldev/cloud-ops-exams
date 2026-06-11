@@ -1,0 +1,970 @@
+{
+  "id": "cloud-ops-exam-2",
+  "title": "Practice Test - AWS Certified CloudOps Engineer Associate",
+  "questions": [
+    {
+      "number": 1,
+      "question": "A live chat application is hosted in AWS which can be embedded as a widget in any website. It uses WebSockets to provide full-duplex communication between the users. The application is hosted on an Auto Scaling group of On-Demand EC2 instances across multiple Availability Zones with an Application Load Balancer in front to balance the incoming traffic. As part of the security audit of the company, there is a requirement that the client's IP address, latencies, request paths, and server responses are properly logged.\n\nHow can you meet the given requirement in this scenario? (Select TWO.)",
+      "simplifiedQuestion": "Which two options allow you to log client IP, latencies, request paths, and server responses for an ALB?",
+      "choices": [
+        "Enable access logging for the Application Load Balancer.",
+        "Enable CloudWatch logs for individual On-Demand EC2 Instances.",
+        "Enable Proxy Protocol in the load balancer.",
+        "Set up an encrypted S3 bucket in another region, where the load balancer will store the logs durably.",
+        "Set up a standard S3 bucket where the load balancer will store the logs."
+      ],
+      "correctAnswers": [
+        "Enable access logging for the Application Load Balancer.",
+        "Set up a standard S3 bucket where the load balancer will store the logs."
+      ],
+      "explanation": "Elastic Load Balancing provides access logs that capture detailed information about requests sent to your load balancer. Each log contains information such as the time the request was received, the client's IP address, latencies, request paths, and server responses. Access logging is an optional feature of Elastic Load Balancing that is disabled by default. When you enable access logging, you must set up a standard S3 bucket in the same region as the load balancer where the logs will be stored. The option to Enable CloudWatch logs for individual EC2 Instances is incorrect because CloudWatch does not provide detailed ALB access log information. The option to set up an encrypted S3 bucket in another region is incorrect because the bucket must be in the same region as the load balancer."
+    },
+    {
+      "number": 2,
+      "question": "A startup company is planning to build their cloud-based enterprise resource planning application in AWS. You are working as their SysOps Administrator and one of the founders asked you to design and build a cost-effective cloud architecture. After deploying and configuring the resources, you have to ensure that it complies with the AWS best practices.\n\nWhich of the following services would you use to help you reduce cost, increase performance, and improve the security of your AWS resources?",
+      "simplifiedQuestion": "Which AWS service helps reduce cost, increase performance, and improve security by providing real-time guidance aligned with best practices?",
+      "choices": [
+        "AWS Trusted Advisor",
+        "AWS Inspector",
+        "Amazon CloudFront",
+        "AWS WAF"
+      ],
+      "correctAnswers": ["AWS Trusted Advisor"],
+      "explanation": "Trusted Advisor is an online resource to help you reduce cost, increase performance, and improve security by optimizing your AWS environment. It also provides real-time guidance to help you provision your resources in compliance with AWS best practices. AWS Inspector is used to check for vulnerabilities in resources like EC2 Instances, not for architectural recommendations. AWS WAF is a web application firewall used for security only. Amazon CloudFront is a content distribution service."
+    },
+    {
+      "number": 3,
+      "question": "A security audit reveals that some security groups used by a company allow inbound SSH traffic from 0.0.0.0/0. The company's system administrator must identify the affected security groups and implement an automated solution that blocks open public-facing SSH ports.\n\nWhich solution meets the requirements?",
+      "simplifiedQuestion": "Which solution uses AWS Config to detect and auto-remediate security groups that allow public SSH access?",
+      "choices": [
+        "Use the `restricted-ssh` AWS Config managed rule. Create a remediation action using an AWS System Manager compliance document that revokes ingress rules allowing SSH traffic from the public.",
+        "Use the `restricted-ssh` AWS Config managed rule. Configure Amazon EventBridge (CloudWatch Events) to revoke ingress rules that allow SSH traffic from the public when a non-compliant security group is detected.",
+        "Use the `restricted-ssh` AWS Config managed rule. Create a remediation action using a Lambda function that revokes ingress rules that allow SSH traffic from the public.",
+        "Use the `restricted-ssh` AWS Config managed rule. Create a remediation action using an AWS System Manager automation document that revokes ingress rules that allow SSH traffic from the public."
+      ],
+      "correctAnswers": [
+        "Use the `restricted-ssh` AWS Config managed rule. Create a remediation action using an AWS System Manager automation document that revokes ingress rules that allow SSH traffic from the public."
+      ],
+      "explanation": "The `restricted-ssh` managed rule in AWS Config checks whether incoming SSH traffic for security groups is accessible (CIDR other than 0.0.0.0/0). Remediation actions for non-compliant resources are carried out using AWS Systems Manager Automation documents, which define actions to perform on noncompliant resources evaluated by AWS Config Rules. Using a Lambda function for remediation is incorrect because remediation actions are specifically carried out via SSM automation documents. EventBridge alone cannot execute remediation actions. Using an SSM compliance document is incorrect because compliance is used for scanning patch/configuration inconsistencies, not for remediation."
+    },
+    {
+      "number": 4,
+      "question": "A Systems Administrator needs to set up a file system that is accessible to individuals across the organization, and establish permissions for each user and group at the file or directory level. The file system should provide storage to access and share common data sets across multiple Amazon EC2 instances in different Availability Zones. The administrator also plans to use IAM user groups to manage access policies for the file system at the organizational level.\n\nWhich of the following options should the administrator use to meet this requirement?",
+      "simplifiedQuestion": "Which AWS storage service provides a shared file system accessible from multiple EC2 instances across Availability Zones with file/directory-level permissions?",
+      "choices": ["Amazon EBS", "Amazon ECS", "Amazon EFS", "Amazon S3"],
+      "correctAnswers": ["Amazon EFS"],
+      "explanation": "Amazon EFS provides file storage in the AWS Cloud. It supports mounting across multiple EC2 instances in different Availability Zones via NFSv4, and provides file/directory-level permission management. It scales automatically from gigabytes to petabytes. Amazon S3 is an object storage service, not a file system. Amazon EBS is block storage that can only be attached to individual EC2 instances at a time. Amazon ECS is a container hosting service, not a file system."
+    },
+    {
+      "number": 5,
+      "question": "A digital media team is working on a short-term project on AWS. The team requires high disk throughput for real-time editing and rendering large video files. All master copies are already backed up in Amazon S3. The team wants to achieve the highest possible I/O performance with AutoEnableIO configured to expedite the editing process.\n\nWhich of the following options would satisfy these requirements in the MOST cost-effective manner?",
+      "simplifiedQuestion": "Which RAID configuration on EBS provides the highest I/O performance most cost-effectively?",
+      "choices": [
+        "Set up a RAID 5 configuration with multiple Amazon EFS volumes together.",
+        "Set up a RAID 0 configuration with multiple Amazon EBS volumes together.",
+        "Set up a RAID 1 configuration with multiple Amazon EBS volumes together.",
+        "Set up a RAID 6 configuration with multiple Amazon EBS volumes together."
+      ],
+      "correctAnswers": [
+        "Set up a RAID 0 configuration with multiple Amazon EBS volumes together."
+      ],
+      "explanation": "RAID 0 stripes multiple volumes together for greater I/O performance. With RAID 0, I/O is distributed across the volumes so adding a volume gives a straight addition of throughput and IOPS. RAID 5 and RAID 6 are not recommended for EBS because parity write operations consume available IOPS (20-30% fewer usable IOPS than RAID 0) and cost more. RAID 1 requires more bandwidth by writing data to multiple volumes simultaneously and provides no write performance improvement. RAID configurations on EFS are unnecessary because EFS is a managed, automatically scaling file system."
+    },
+    {
+      "number": 6,
+      "question": "A company has several applications and workloads running on AWS that are managed by various teams. The CloudOps Engineer has been instructed to configure alerts to notify the teams when usage exceeds the defined cost threshold. The team already uses user-defined cost allocation tags to track spending.\n\nWhich of the following is the MOST suitable that the Engineer should use?",
+      "simplifiedQuestion": "Which AWS service lets you set custom cost thresholds and send alerts when usage is forecasted to exceed them?",
+      "choices": [
+        "AWS Cost Explorer",
+        "AWS Billing Conductor",
+        "AWS Trusted Advisor",
+        "AWS Budgets"
+      ],
+      "correctAnswers": ["AWS Budgets"],
+      "explanation": "AWS Budgets allows you to set custom budgets that alert you when your costs or usage exceed (or are forecasted to exceed) your budgeted amount. Budget alerts can be sent via email and/or Amazon SNS. AWS Billing Conductor is a customizable billing service for consolidated billing management but does not provide utilization alerts. AWS Cost Explorer only lets you visualize and manage costs over time — you cannot define alert thresholds. AWS Trusted Advisor provides real-time guidance for AWS best practices, not cost threshold alerts."
+    },
+    {
+      "number": 7,
+      "question": "A social media company has hired a CloudOps Engineer to ensure that all of its AWS CloudFormation stacks use the latest Windows AMI. The engineer also wants the ability to apply urgent security patches using the Patch Now option. The solution should have a minimal management overhead, since the Windows AMI will need to be updated again in the future to include the latest security patches.\n\nWhich is the most suitable option that will meet the requirement?",
+      "simplifiedQuestion": "Which solution minimizes overhead for keeping CloudFormation stacks updated with the latest Windows AMI ID?",
+      "choices": [
+        "Using Amazon SNS, get all the latest updates from Windows AMI notifications. Launch an AWS Lambda function which updates to the CloudFormation template and set a trigger to run the function when a new AMI is released.",
+        "Modify all of their CloudFormation templates to use the latest Windows AMI. Just update the CloudFormation template once again when new AMIs are released.",
+        "Use AWS Systems Manager to achieve this task. Configure the Parameters section in the template to specify the latest version of Windows regional AMI ID.",
+        "Develop a REST API which gets the latest Windows AMI and update the CloudFormation template. Update the template again if the ImageID changes."
+      ],
+      "correctAnswers": [
+        "Use AWS Systems Manager to achieve this task. Configure the Parameters section in the template to specify the latest version of Windows regional AMI ID."
+      ],
+      "explanation": "AWS Systems Manager Parameter Store provides secure, hierarchical storage for configuration data including AMI IDs. By referencing the SSM parameter for the latest Windows AMI in the CloudFormation template's Parameters section, stacks will automatically use the updated AMI ID on the next stack update without manual template changes. Manually updating CloudFormation templates has high operational overhead. Developing a REST API is unnecessarily complex. Using SNS notifications with a Lambda function to update templates also entails high overhead compared to simply referencing Parameter Store."
+    },
+    {
+      "number": 8,
+      "question": "A company has a new policy to encrypt all Amazon Elastic Block Store (Amazon EBS) volumes in the us-east-2 and us-west-2 AWS regions. To help enforce this policy, the company's administrator needs to come up with a solution for automatically encrypting newly created EBS volumes.\n\nWhich method will meet the requirement in the most efficient way?",
+      "simplifiedQuestion": "What is the most efficient way to ensure all newly created EBS volumes are encrypted in specific AWS regions?",
+      "choices": [
+        "Enable the default EBS encryption setting in the Amazon EC2 Console of each AWS region",
+        "Enable the default EBS encryption in the IAM Console setting.",
+        "Configure the `encrypted-volume` AWS Config managed rule. Associate a remediation action that encrypts unencrypted EBS volumes.",
+        "Create an Amazon DLM lifecycle policy and enable the `encryption for snapshot copies` option."
+      ],
+      "correctAnswers": [
+        "Enable the default EBS encryption setting in the Amazon EC2 Console of each AWS region"
+      ],
+      "explanation": "You can configure your AWS account to enforce encryption of new EBS volumes by enabling the default EBS encryption setting in the Amazon EC2 Console. This setting applies per region, so you must enable it in each region separately (us-east-2 and us-west-2). The Amazon DLM lifecycle policy with encryption for snapshot copies only encrypts snapshots copied to another region, not new volumes. The `encrypted-volume` AWS Config rule only helps encrypt existing unencrypted volumes, not newly created ones. Default EBS encryption is not available in the IAM Console."
+    },
+    {
+      "number": 9,
+      "question": "A real-estate company is leveraging an Elastic Load Balancer that uses a TLS certificate to provide HTTPS security to its website visitors. Users reported outages because of the TLS certificate expiry, and the CloudOps Engineer needs to find a solution that automates the renewal of the certificate.\n\nWhat is the MOST operationally efficient approach to perform the automation required?",
+      "simplifiedQuestion": "What is the most operationally efficient way to automate TLS certificate renewal for an ELB?",
+      "choices": [
+        "Find a third-party certificate authority (CA) and request a public certificate. Configure the ELB to grab the certificate directly from the CA and create a refresh cycle on the ELB to renew the certificate three months before expiration.",
+        "Find a third-party certificate authority (CA) and request a public certificate. Upload the certificate to AWS Certificate Manager (ACM) and attach it to the ELB. ACM automatically handles certificate renewal so there's no need for further configuration.",
+        "Register a public certificate via AWS Certificate Manager (ACM). Associate the newly registered certificate from ACM to the ELB. ACM automatically handles certificate renewal so there's no need for further configuration.",
+        "Use AWS Certificate Manager to request a public certificate and associate it with the ELB. Build a Lambda function that renews the certificate and schedule the function on Amazon EventBridge (Amazon CloudWatch Events) to run every 18 months."
+      ],
+      "correctAnswers": [
+        "Register a public certificate via AWS Certificate Manager (ACM). Associate the newly registered certificate from ACM to the ELB. ACM automatically handles certificate renewal so there's no need for further configuration."
+      ],
+      "explanation": "ACM provides managed renewal for Amazon-issued SSL/TLS certificates. When using DNS validation, ACM renews certificates automatically. Requesting a certificate directly from ACM and associating it with the ELB is the most operationally efficient approach with no further configuration needed. Third-party certificates imported into ACM are NOT automatically renewed — you must renew them manually. Building a Lambda function for renewal adds unnecessary complexity. You cannot configure a refresh cycle directly on the ELB."
+    },
+    {
+      "number": 10,
+      "question": "A company has multiple sets of running Amazon EC2 instances, each with an ELB to distribute traffic among the instances. It is important that the endpoints are reachable, and the CloudOps Engineer should be notified if something goes wrong. Amazon Route 53 health checks must be integrated with Amazon CloudWatch alarms to monitor endpoint health.\n\nWhich of the following are valid types of Route 53 health checks that can be used? (Select TWO.)",
+      "simplifiedQuestion": "Which two types of Route 53 health checks are valid?",
+      "choices": [
+        "Health checks that monitor AWS CloudTrail alarms",
+        "Health checks that monitor the CPU Usage of the EC2 instance",
+        "Health checks that monitor the AWS Route 53 Service Health from the Service Health Dashboard",
+        "Health checks that monitor CloudWatch alarms",
+        "Health checks that monitor an endpoint"
+      ],
+      "correctAnswers": [
+        "Health checks that monitor CloudWatch alarms",
+        "Health checks that monitor an endpoint"
+      ],
+      "explanation": "Amazon Route 53 supports three types of health checks: (1) health checks that monitor an endpoint by IP address or domain name, (2) calculated health checks that monitor other health checks, and (3) health checks that monitor CloudWatch alarms. Route 53 health checks cannot monitor the AWS Service Health Dashboard, EC2 CPU usage metrics, or CloudTrail alarms."
+    },
+    {
+      "number": 11,
+      "question": "A research agency is performing a migration operation with its production file server to AWS. The CloudOps Engineer is required to ensure that the data stored on the file server in AWS will remain accessible even if an Availability Zone (AZ) is unavailable, system maintenance is ongoing, or unplanned service disruption occurs. In addition, users should be able to interact with the file server via SMB protocol and manage file permissions using Windows Access Control Lists (ACLs).\n\nWhich cloud solution can help the CloudOps Engineer accomplish the requirements?",
+      "simplifiedQuestion": "Which AWS solution provides a highly available SMB-based Windows File Server with automatic failover across Availability Zones?",
+      "choices": [
+        "Use AWS Storage Gateway and create a single file gateway.",
+        "Set up a Multi-AZ Amazon FSx for Windows File Server.",
+        "Deploy an Application Load Balancer backed by two AWS Storage Gateway file gateways in different AZs.",
+        "Create two Amazon FSx for Windows File Server Single-AZ 2 file systems on different AZs. Use Microsoft Distributed File System Replication (DFSR) to replicate data between the two file systems automatically."
+      ],
+      "correctAnswers": [
+        "Set up a Multi-AZ Amazon FSx for Windows File Server."
+      ],
+      "explanation": "Amazon FSx for Windows File Server supports SMB protocol and Windows ACLs. In a Multi-AZ deployment, FSx automatically provisions and maintains a standby file server in a different Availability Zone with synchronous replication. It automatically fails over during planned maintenance or service disruption. Single-AZ 2 file systems do not support DFSR, so that option is invalid. Storage Gateway is for integrating on-premises workloads with cloud storage, not for provisioning a Windows File Server. An ALB backed by Storage Gateway gateways is also not a valid Windows File Server solution."
+    },
+    {
+      "number": 12,
+      "question": "A leading national bank migrated its on-premises infrastructure to AWS. The CloudOps Engineer noticed that the cache hit ratio of the CloudFront web distribution is less than 15%.\n\nWhich combination of actions should he do to increase the cache hit ratio for the distribution? (Select TWO.)",
+      "simplifiedQuestion": "Which two actions will increase the CloudFront cache hit ratio?",
+      "choices": [
+        "Always add the Accept-Encoding header to compress all the content for each and every request.",
+        "Set the Viewer Protocol Policy of your web distribution to only use HTTPS to serve media content.",
+        "Configure your origin to add a Cache-Control max-age directive to your objects, and specify the longest practical value for max-age to increase your TTL.",
+        "In the Cache Behavior settings of your distribution, configure to forward only the query string parameters for which your origin will return unique objects.",
+        "Use Signed URLs to your CloudFront web distribution."
+      ],
+      "correctAnswers": [
+        "Configure your origin to add a Cache-Control max-age directive to your objects, and specify the longest practical value for max-age to increase your TTL.",
+        "In the Cache Behavior settings of your distribution, configure to forward only the query string parameters for which your origin will return unique objects."
+      ],
+      "explanation": "To improve the CloudFront cache hit ratio, you can increase the TTL of objects by adding a Cache-Control max-age directive, and configure cache behaviors to forward only the required query string parameters for which the origin returns unique objects. Serving media via HTTPS instead of HTTP actually hurts cache hit ratio — HTTP is recommended for media. Signed URLs are for securing content, not improving caching. Adding the Accept-Encoding header compresses content but does not improve cache hit ratio; removing it when compression is not needed is recommended."
+    },
+    {
+      "number": 13,
+      "question": "A startup is using Amazon CloudWatch to monitor the workload of its website running on an Amazon EC2 instance. The CloudWatch Logs Agent has been set up on the instance to publish application logs, and the CloudOps engineer also wants to track the mem_used_percent metric to monitor memory utilization. Despite having full access to the AWS account, the CloudOps engineer is still unable to view the logs in the CloudWatch Logs Console. The engineer suspects that the instance is missing required permissions, such as logs:CreateLogGroup for the CloudWatch logs agent.\n\nWhich solution would most likely solve the issue?",
+      "simplifiedQuestion": "Why can't an EC2 instance push logs to CloudWatch Logs, and how do you fix it?",
+      "choices": [
+        "Create a connection between CloudWatch Logs and the instance using an interface VPC endpoint.",
+        "Attach an IAM role with sufficient CloudWatch Logs permission to the instance profile of the EC2 instance",
+        "Attach the administrator's IAM user to the instance profile of the EC2 instance.",
+        "Reinstall the CloudWatch Logs agent."
+      ],
+      "correctAnswers": [
+        "Attach an IAM role with sufficient CloudWatch Logs permission to the instance profile of the EC2 instance"
+      ],
+      "explanation": "To push log events to CloudWatch, the CloudWatch agent requires credentials from an IAM role policy. The instance profile needs an IAM role with permissions including logs:CreateLogGroup, logs:CreateLogStream, logs:PutLogEvents, and logs:DescribeLogStreams. A VPC endpoint is only needed when you want instances to communicate with CloudWatch privately. Reinstalling the agent is a last resort. IAM users cannot be linked to instance profiles — only IAM roles can."
+    },
+    {
+      "number": 14,
+      "question": "A retail company is using AWS Organizations to manage user accounts. The consolidated billing feature is enabled to consolidate billing and payment for multiple AWS accounts. Member account owners requested to get the benefits of Reserved Instances (RIs) but they don't want to share RIs with other members of the AWS Organization.\n\nWhich steps should the CloudOps Engineer perform to achieve the requirements?",
+      "simplifiedQuestion": "How do you allow member accounts to get RI discounts without sharing them across the organization?",
+      "choices": [
+        "Disable RI discount sharing in each of the member accounts. Then, purchase RIs in the member accounts only.",
+        "Go to Billing Preferences in the management account and disable RI discount sharing. Then, purchase the RIs using the management account.",
+        "Disable RI discount sharing in each of the member accounts. Then, purchase the RIs using the management account.",
+        "Go to Billing Preferences in the management account and disable RI discount sharing. Then, purchase the RIs using individual member accounts."
+      ],
+      "correctAnswers": [
+        "Go to Billing Preferences in the management account and disable RI discount sharing. Then, purchase the RIs using individual member accounts."
+      ],
+      "explanation": "RI discount sharing can only be turned off by the management account in the organization, not by member accounts. When RI sharing is turned off for an account, RI discounts apply only to that account's purchased RIs. To ensure discounts apply to individual member accounts, you must purchase the RIs on the individual member accounts after disabling sharing from the management account. Purchasing RIs from the management account would not direct the discounts to member accounts."
+    },
+    {
+      "number": 15,
+      "question": "A digital advertising company is planning to migrate its web-based data analytics application from its on-premises data center to AWS. You designed the architecture to use an Application Load Balancer and an Auto Scaling group of On-Demand EC2 Instances which are deployed on a private subnet. The instances will be fetching data analytics from various API services over the Internet every 5 minutes. For security reasons, the EC2 instances should not allow any connections initiated from the Internet.\n\nWhich of the following options is the most scalable and highly available solution which should be implemented?",
+      "simplifiedQuestion": "What is the best way to allow private EC2 instances to make outbound Internet requests while blocking all inbound Internet connections?",
+      "choices": [
+        "Set up a NAT Gateway in the public subnet.",
+        "Set up a NAT Instance in the private subnet.",
+        "Set up a NAT Instance in the public subnet.",
+        "Set up a NAT Gateway in the private subnet."
+      ],
+      "correctAnswers": ["Set up a NAT Gateway in the public subnet."],
+      "explanation": "A NAT Gateway enables instances in a private subnet to connect to the Internet while preventing the Internet from initiating connections with those instances. It must be deployed in a public subnet (so it can communicate with the Internet Gateway) and provides better availability, higher bandwidth, and less administrative effort than a NAT Instance. Placing a NAT Gateway in a private subnet is incorrect because it would not be able to reach the Internet Gateway. NAT Instances are a single point of failure and require manual maintenance and scaling."
+    },
+    {
+      "number": 16,
+      "question": "A financial start-up has recently adopted a hybrid cloud infrastructure with AWS Cloud. They are planning to migrate their online payments system that supports an IPv6 address and uses an Oracle database in a RAC configuration. As the AWS Consultant, you have to make sure that the application can initiate outgoing traffic to the Internet but blocks any incoming connection from the Internet.\n\nWhich of the following options would you do to properly migrate the application to AWS?",
+      "simplifiedQuestion": "How do you support outbound-only IPv6 Internet traffic in AWS while keeping an Oracle RAC database?",
+      "choices": [
+        "Migrate the Oracle database to RDS. Launch an EC2 instance to host the application and then set up a NAT gateway instead of a NAT instance for better availability and higher bandwidth.",
+        "Migrate the Oracle database to an EC2 instance. Launch the application on a separate EC2 instance and then set up an egress-only Internet gateway.",
+        "Migrate the Oracle database to RDS. Launch the application on a separate EC2 instance and then set up a NAT Instance.",
+        "Migrate the Oracle database to an EC2 instance. Launch an EC2 instance to host the application and then set up a NAT Instance."
+      ],
+      "correctAnswers": [
+        "Migrate the Oracle database to an EC2 instance. Launch the application on a separate EC2 instance and then set up an egress-only Internet gateway."
+      ],
+      "explanation": "An egress-only Internet gateway allows outbound IPv6 communication from a VPC to the Internet while preventing the Internet from initiating IPv6 connections with your instances. NAT devices do not support IPv6 — you must use an egress-only Internet gateway for IPv6. Also, Amazon RDS does not support Oracle RAC configuration, so the database must be hosted on an EC2 instance."
+    },
+    {
+      "number": 17,
+      "question": "A company uses Amazon Route 53 to register the domain name of an online timesheet application named: \"www.tutorialsdojo-timesheet.com\" and deployed the application on ECS. After a few months, a new version of the timesheet application is ready to be deployed which contains bug fixes and new features. The DevOps team launched a separate ECS instance for the new version and they instructed you to direct the initial set of traffic to the new version so they can do their production verification tests. Once verified that the new version is working, you can now totally route all traffic coming from the www.tutorialsdojo-timesheet.com domain to the new ECS instance.\n\nWhich of the following would you do to smoothly deploy the new application version?",
+      "simplifiedQuestion": "Which Route 53 routing policy allows you to split traffic between old and new application versions and gradually shift all traffic?",
+      "choices": [
+        "Launch 2 resource records based on the Weighted Routing policy",
+        "Launch a resource record based on the Latency routing policy",
+        "Launch a resource record based on the Geoproximity routing policy",
+        "Launch 2 resource records based on the Failover Routing policy"
+      ],
+      "correctAnswers": [
+        "Launch 2 resource records based on the Weighted Routing policy"
+      ],
+      "explanation": "Weighted routing lets you associate multiple resources with a single domain name and control how much traffic is routed to each resource. You create records with the same name and type and assign relative weights. This is useful for testing new application versions — you can start with a tiny proportion of traffic to the new version and gradually shift more until all traffic goes to the new version. Geoproximity routing is for routing based on resource location. Latency routing minimizes latency across regions. Failover routing is for active-passive failover scenarios."
+    },
+    {
+      "number": 18,
+      "question": "A financial company is launching an online web portal that will be hosted in an Auto Scaling group of Amazon EC2 instances across multiple Availability Zones behind an Application Load Balancer (ALB). To allow HTTP and HTTPS traffic, the CloudOps Engineer configured the Network ACL and the Security Group of both the ALB and EC2 instances to allow inbound traffic on ports 80 and 443. However, the online portal is still unreachable over the public internet after the deployment.\n\nHow can the Administrator fix this issue?",
+      "simplifiedQuestion": "Why is an ALB-backed web portal unreachable even after opening ports 80 and 443, and how do you fix it?",
+      "choices": [
+        "Allow ephemeral ports in the Security Group by adding a new rule to allow outbound traffic on ports 1024 – 65535.",
+        "Allow ephemeral ports in the Network ACL by adding a new rule to allow outbound traffic on ports 1024 – 65535.",
+        "In the Network ACL, add a new rule to allow inbound traffic on ports 1024 – 65535.",
+        "In the Security Group, add a new rule to allow outbound traffic on port 80 and port 443."
+      ],
+      "correctAnswers": [
+        "Allow ephemeral ports in the Network ACL by adding a new rule to allow outbound traffic on ports 1024 – 65535."
+      ],
+      "explanation": "Network ACLs are stateless, so you must explicitly allow both inbound and outbound traffic. When a client connects to a server, a random ephemeral port (1024–65535) becomes the client's source port and the destination for return traffic. Outbound traffic on ephemeral ports must be allowed in the Network ACL. Security groups are stateful, so return traffic is automatically allowed without additional rules. Ephemeral ports should be added to the Network ACL outbound rules (not inbound) when clients access from the Internet."
+    },
+    {
+      "number": 19,
+      "question": "An IT solutions company offers a service that allows users to upload and download files when needed. The files are retrievable for one year and are stored in Amazon S3 Standard. The CloudOps Engineer noticed that users frequently accessed their files over the first 30 days, and from then on, the files are only accessed twice a month.\n\nThe CloudOps Engineer needs to implement a cost-effective S3 Lifecycle policy that maintains the object availability for users.\n\nWhich action should the CloudOps Engineer perform to achieve the requirements?",
+      "simplifiedQuestion": "Which S3 Lifecycle policy transition is most cost-effective while maintaining multi-AZ availability for files accessed only twice a month after 30 days?",
+      "choices": [
+        "Configure an S3 Lifecycle policy that moves objects to S3 One Zone-Infrequent Access (S3 One Zone-IA) class after 30 days.",
+        "Transition objects to S3 Glacier Flexible Retrieval after 30 days",
+        "Configure all buckets to transition objects to S3 Standard-Infrequent Access (S3 Standard-IA) after 30 days.",
+        "Move objects to S3 Standard-Infrequent Access (S3 Standard-IA) immediately."
+      ],
+      "correctAnswers": [
+        "Configure all buckets to transition objects to S3 Standard-Infrequent Access (S3 Standard-IA) after 30 days."
+      ],
+      "explanation": "S3 Standard-IA is designed for long-lived but less frequently accessed data. It replicates data across a minimum of three AZs like S3 Standard, maintaining availability. Since files are still accessed twice a month, immediate availability is required. S3 One Zone-IA only replicates within a single AZ, which reduces availability. S3 Glacier Flexible Retrieval takes hours to retrieve data, making it unsuitable for files that must be immediately available. Moving to S3 Standard-IA immediately is incorrect because the files are frequently accessed in the first 30 days and S3 Standard-IA charges a retrieval fee, leading to higher costs."
+    },
+    {
+      "number": 20,
+      "question": "A company's marketing website utilizes an RDS database instance to store transactional data. As the user visits grow, the IT department decides to implement a caching service for faster database performance and to maintain high availability for the RDS instance.\n\nWhich combination of steps should the SysOps admin perform to accomplish the requirement? (SELECT TWO.)",
+      "simplifiedQuestion": "Which two options provide caching and high availability for an RDS-backed application?",
+      "choices": [
+        "Use an in-memory cache service like Amazon ElastiCache for Memcached data store.",
+        "Utilize Amazon ElastiCache for Redis data store to support the demands of the database.",
+        "Activate Multi-AZ deployment for the data store.",
+        "Manage cache node connections using Auto Discovery.",
+        "Use Multi-threading for the RDS database instance."
+      ],
+      "correctAnswers": [
+        "Utilize Amazon ElastiCache for Redis data store to support the demands of the database.",
+        "Activate Multi-AZ deployment for the data store."
+      ],
+      "explanation": "ElastiCache for Redis provides a highly available, distributed in-memory cache that reduces database access latency and supports Multi-AZ failover via automatic failover to a read replica. Multi-AZ deployment for RDS provides automatic failover to a standby replica in a different AZ for high availability. ElastiCache for Memcached does not support Multi-AZ high availability. Auto Discovery is used only for managing Memcached cluster connections. Multi-threading improves CPU performance but does not address caching or high availability needs."
+    },
+    {
+      "number": 21,
+      "question": "An administrator has launched new AWS accounts. Management wants that IAM users across all accounts be able to sign in using a single login URL as shown below:\n\nhttps://tutorialsdojo.signin.aws.amazon.com/console\n\nHow can the administrator meet the requirement?",
+      "simplifiedQuestion": "Is it possible to create a single IAM login URL shared across multiple AWS accounts?",
+      "choices": [
+        "Consolidate the accounts using AWS Organizations. Create an alias named \"tutorialsdojo\" for the root account.",
+        "Create an alias named \"tutorialsdojo\" for each account.",
+        "Having a single login URL for different AWS accounts is not possible.",
+        "Create an alias named \"tutorialsdojo\" for each account. Have each IAM user sign in using their access key ID and secret access key."
+      ],
+      "correctAnswers": [
+        "Having a single login URL for different AWS accounts is not possible."
+      ],
+      "explanation": "Each AWS account can have only one alias, and account aliases must be unique across all AWS products. You cannot have the same alias for multiple accounts. The alias in AWS Organizations only applies to the root/management account and is not inherited by member accounts. IAM user access keys are for CLI/API access, not for console login."
+    },
+    {
+      "number": 22,
+      "question": "A microservice application is being hosted in the ap-southeast-1 and ap-northeast-1 regions. The ap-southeast-1 region accounts for 80% of traffic, with the rest from ap-northeast-1. As part of the company's business continuity plan, all traffic must be rerouted to the other region if one of the regions' servers fails.\n\nWhich solution can comply with the requirement?",
+      "simplifiedQuestion": "How do you distribute traffic 80/20 across two regions with automatic failover if one region goes down?",
+      "choices": [
+        "Set up an 80/20 weighted routing in the network load balancer and enable health checks.",
+        "Set up an 80/20 weighted routing in the application load balancer and enable health checks.",
+        "Set up a failover routing policy in AWS Route 53 and enable health checks.",
+        "Set up an 80/20 weighted routing policy in AWS Route 53 and enable health checks."
+      ],
+      "correctAnswers": [
+        "Set up an 80/20 weighted routing policy in AWS Route 53 and enable health checks."
+      ],
+      "explanation": "Route 53 weighted routing lets you control what percentage of traffic goes to each resource. When health checks are enabled, Route 53 automatically skips unhealthy endpoints and routes traffic to healthy ones. This satisfies both the 80/20 traffic split and the failover requirement. Application load balancers support weighted routing but only within Availability Zones, not across regions. Network load balancers do not support weighted routing at all. Failover routing does not let you control traffic proportions."
+    },
+    {
+      "number": 23,
+      "question": "A company has a tagging strategy for controlling access to Amazon EC2 across their AWS Organization units. The system administrator noticed that some tags do not follow the company's naming convention which causes permission issues.\n\nWhich solution can help the administrator identify the affected resources with non-compliant tags?",
+      "simplifiedQuestion": "Which AWS solution helps identify EC2 resources with tags that don't comply with the company's naming convention?",
+      "choices": [
+        "Apply a service control policy (SCP) that detects noncompliance tags",
+        "Create a tag policy that standardizes the naming of tags across OUs",
+        "Set up the `require-tags` managed rule in AWS Config",
+        "Write a Lambda function that runs compliance checks whenever CloudTrail records a `CreateTag` API event"
+      ],
+      "correctAnswers": [
+        "Set up the `require-tags` managed rule in AWS Config"
+      ],
+      "explanation": "The `require-tags` managed rule in AWS Config checks if a resource contains the tags you specify and reports non-compliant resources. This helps identify resources with tags that don't follow the naming convention. Tag policies can enforce standardization but cannot report which existing resources already have non-compliant tags. A Lambda function on CloudTrail events only detects new tags going forward, not existing non-compliant ones. SCPs are guardrails for IAM permissions, not for checking tag compliance."
+    },
+    {
+      "number": 24,
+      "question": "A document management system of a legal firm is hosted in AWS Cloud with an Amazon S3 bucket as the primary storage service. To comply with the security requirements, a CloudOps engineer must ensure that the confidential documents and files stored in AWS are secured. The engineer is reviewing S3 bucket policies, ACLs, and object ownership settings to implement proper access controls.\n\nWhich features can be used to restrict access to data in S3? (Select TWO.)",
+      "simplifiedQuestion": "Which two S3 features can be used to restrict access to confidential data?",
+      "choices": [
+        "Configure the S3 ACL on the bucket of each individual object.",
+        "Set up AWS IAM Identity Center with IAM Identity Federation.",
+        "Disable Cross-Origin Resource Sharing (CORS).",
+        "Enable Cross-region replication (CRR).",
+        "Configure the S3 bucket policy to only allow access to authorized personnel.",
+        "Launch an Amazon CloudFront distribution for the bucket."
+      ],
+      "correctAnswers": [
+        "Configure the S3 ACL on the bucket of each individual object.",
+        "Configure the S3 bucket policy to only allow access to authorized personnel."
+      ],
+      "explanation": "Amazon S3 offers resource-based access policies including bucket policies and ACLs. Bucket policies control access at the bucket and object level, while ACLs control access on individual objects. Both are resource-based policies used to restrict access. CloudFront is for content caching and delivery, not access restriction. Cross-region replication simply copies objects to another bucket. IAM Identity Center is for SSO management across accounts. CORS allows web apps to access S3 resources from different domains but doesn't restrict access."
+    },
+    {
+      "number": 25,
+      "question": "A leading commercial bank discovered an issue with their online banking system that is hosted on their Auto Scaling group and scaled out to over 60 EC2 instances. The Auto Scaling group is taking multiple nodes offline at the same time whenever you update the Launch Template. To update the system, the development team decided to use AWS CloudFormation by changing a parameter to the latest version of the code.\n\nWhat can you do to limit the impact on customers while the update is being performed?",
+      "simplifiedQuestion": "How do you ensure newly deployed EC2 instances are healthy before old instances are taken down during a CloudFormation stack update?",
+      "choices": [
+        "Re-configure the Auto Scaling group to use 6 target groups with 10 EC2 instances each to easily manage the service.",
+        "In the CloudFormation template, add the UpdatePolicy attribute and then enable the WaitOnResourceSignals property. In the user data script, append a health check to signal CloudFormation that the update has been successfully completed.",
+        "Configure the user data script to run the aws ec2 terminate-instances against the next oldest Instance ID.",
+        "In the CloudFormation template, add a DependsOn attribute to the Auto Scaling group resource to depend on the Launch Template. Edit the user data script for each EC2 instance to signal the Waitcondition."
+      ],
+      "correctAnswers": [
+        "In the CloudFormation template, add the UpdatePolicy attribute and then enable the WaitOnResourceSignals property. In the user data script, append a health check to signal CloudFormation that the update has been successfully completed."
+      ],
+      "explanation": "The UpdatePolicy attribute with WaitOnResourceSignals ensures that CloudFormation waits for a signal from each new instance (via cfn-signal in the user data) before proceeding with the rolling update. This ensures new instances are healthy before old ones are terminated, minimizing customer impact. The DependsOn attribute controls creation order but doesn't guarantee health checks. Terminating instances via user data script is error-prone and causes downtime. Splitting into target groups adds complexity without addressing the update issue."
+    },
+    {
+      "number": 26,
+      "question": "A company with a multi-account AWS environment has several AWS resources that are shared with an external entity. To improve the security posture of the company's cloud infrastructure, the CloudOps Engineer needs to preview any changes to be implemented in the existing resource permissions. The Administrator must ensure that the new policy changes grant only the intended public and cross-account access to their specified cloud resource. A weekly report is also necessary which contains a list of all the access and the external principal granted to each shared AWS resource.\n\nWhat should the Engineer do to satisfy the given requirement?",
+      "simplifiedQuestion": "Which AWS service can preview resource permission changes and generate findings about external access to shared resources?",
+      "choices": [
+        "Try implementing the resource permission changes in the IAM Policy Simulator first to preview any new policy. Generate the security findings using Amazon GuardDuty to view all the access and the external principal granted to each shared AWS resource.",
+        "Run the VPC Reachability Analyzer to preview the upcoming changes that will be made in the existing resource permissions as well as for generating a list of all the access and the external principal granted to each shared AWS resource.",
+        "Use the Well-Architected Tool to preview any upcoming change that will be done in the existing resource permissions. Check the AWS Trusted Advisor to view a list of all the access and the external principal granted to each shared AWS resource.",
+        "Set up IAM Access Analyzer to preview any upcoming resource permission changes and for generating findings containing a list of all the access and the external principal granted to each shared AWS resource."
+      ],
+      "correctAnswers": [
+        "Set up IAM Access Analyzer to preview any upcoming resource permission changes and for generating findings containing a list of all the access and the external principal granted to each shared AWS resource."
+      ],
+      "explanation": "IAM Access Analyzer helps identify resources shared with external entities using logic-based reasoning to analyze resource-based policies. It generates findings that include access details and the external principals granted access. It also lets you preview how policy changes affect public and cross-account access before deploying. The Well-Architected Tool and Trusted Advisor do not provide permission change previews or external access findings. VPC Reachability Analyzer is for network connectivity testing. GuardDuty focuses on threat detection, not IAM permission reporting."
+    },
+    {
+      "number": 27,
+      "question": "A company is using AWS KMS to encrypt the data in its suite of financial applications deployed in different AWS accounts. Additionally, Amazon EC2 key pairs are used to manage SSH access to instances across these accounts. The CloudOps Engineer is instructed to capture all events related to AWS KMS and EC2 key pairs, including key creation, deletion, and rotation, across all accounts. This is required for security compliance and audit readiness.\n\nWhich of the following approach can be used to fulfill this requirement?",
+      "simplifiedQuestion": "Which AWS service captures all KMS and EC2 key pair API events across multiple accounts for compliance auditing?",
+      "choices": [
+        "Use AWS CloudTrail to log AWS KMS and EC2 key pair API calls on every AWS account. Send the logs to a central Amazon S3 bucket.",
+        "Use Amazon EventBridge to collect AWS KMS and EC2 key pair events on every account. Send the logs to a central Amazon S3 bucket.",
+        "Use AWS Config to record configuration changes to AWS KMS keys and EC2 key pairs in every account. Send the logs to a central Amazon S3 bucket.",
+        "Use Amazon Inspector to generate an AWS KMS and EC2 key pair assessment report on every AWS account. Send the reports to a central Amazon S3 bucket."
+      ],
+      "correctAnswers": [
+        "Use AWS CloudTrail to log AWS KMS and EC2 key pair API calls on every AWS account. Send the logs to a central Amazon S3 bucket."
+      ],
+      "explanation": "AWS CloudTrail records detailed API activity across AWS services, including key creation, deletion, and rotation for AWS KMS, as well as EC2 key pair operations. It supports multi-account logging and centralized delivery to an S3 bucket. AWS KMS is integrated with CloudTrail and all API calls are captured as events. Amazon Inspector assesses security vulnerabilities, not API events. EventBridge only notifies you of certain events, not full API logging. AWS Config records configuration changes but misses operational API events like key creation or deletion."
+    },
+    {
+      "number": 28,
+      "question": "A large technology company, which is heavily using AWS for its cloud-based applications to serve its clients, has both private and public application servers that are hosted in over 1000 Amazon EC2 Instances. To ensure security, the CloudOps Engineer needs to ensure that public SSH is always disabled for the private servers.\n\nWhich of the following options would be the best way to ensure this security check is in place?",
+      "simplifiedQuestion": "What is the best way to continuously ensure that private EC2 instances do not allow public SSH access?",
+      "choices": [
+        "Use the AWS-DisableIncomingSSHOnPort22 Systems Manager automation runbook to continuously enforce that SSH access is disabled on all private EC2 instances.",
+        "Use the EC2 Config utility to check all the configuration of the Security groups.",
+        "Use AWS Config Rules to check all the configuration of the Security Groups.",
+        "Use Amazon Inspector to check all the configuration of the Security Groups."
+      ],
+      "correctAnswers": [
+        "Use AWS Config Rules to check all the configuration of the Security Groups."
+      ],
+      "explanation": "AWS Config Rules provide comprehensive and scalable capabilities for assessing and continuously monitoring the configurations of AWS resources, including security groups. You can view historical configurations and determine whether SSH was allowed at any point in time. AWS Inspector is a security assessment service but not the most efficient for this specific continuous security group monitoring use case. The AWS-DisableIncomingSSHOnPort22 SSM runbook is reactive/remediation-focused, not a proactive monitoring tool. The EC2 Config utility is less comprehensive than AWS Config Rules."
+    },
+    {
+      "number": 29,
+      "question": "A company has recently adopted a hybrid cloud infrastructure. They plan to establish a dedicated connection between their on-premises network and their Amazon VPC. In the next couple of months, they will migrate their applications and move their data from their on-premises network to AWS, which is why they need a more consistent network experience than Internet-based connections.\n\nWhich of the following options should be implemented for this scenario?",
+      "simplifiedQuestion": "Which AWS service provides a dedicated network connection between on-premises and AWS with consistent performance?",
+      "choices": [
+        "Set up a VPN Connection",
+        "Set up a Direct Connect connection",
+        "Set up an AWS VPN CloudHub",
+        "Set up a VPC peering"
+      ],
+      "correctAnswers": ["Set up a Direct Connect connection"],
+      "explanation": "AWS Direct Connect establishes a dedicated network connection from your premises to AWS, providing private connectivity that reduces network costs, increases bandwidth throughput, and provides a more consistent network experience than Internet-based connections. VPN connections traverse the public Internet and are not dedicated connections. AWS VPN CloudHub is also Internet-based. VPC Peering is used to connect two or more VPCs within AWS, not on-premises to AWS."
+    },
+    {
+      "number": 30,
+      "question": "A CloudOps Engineer has been instructed to handle the deployment of the cloud resources in a single AWS account using AWS CloudFormation. The Engineer must develop a unified template that can be reused for multiple environments instead of manually copying and pasting the same configurations into the template. The dedicated template will be used and referenced from within other templates in the same AWS Region. If the template has been updated, any stack that is referencing it will automatically use the updated configuration. The Engineer also needs to specify the OnFailure behavior in the CloudFormation templates to control how stack creation handles errors.\n\nHow can the Engineer meet this requirement?",
+      "simplifiedQuestion": "Which CloudFormation feature allows a template to reference another reusable template within the same region?",
+      "choices": [
+        "Use Nested Stacks",
+        "Use Stack Policies",
+        "Use Change Sets",
+        "Use StackSets"
+      ],
+      "correctAnswers": ["Use Nested Stacks"],
+      "explanation": "Nested stacks allow you to create dedicated templates for common components (e.g., a load balancer configuration) and reference them using the AWS::CloudFormation::Stack resource from within other templates. When the nested template is updated, all stacks referencing it will use the updated configuration. StackSets are for deploying stacks across multiple accounts and regions, not for referencing templates within the same account/region. Change Sets preview changes to an existing stack. Stack Policies prevent unintentional updates or deletions to stack resources."
+    },
+    {
+      "number": 31,
+      "question": "A CloudOps Engineer needs to create a CloudFormation template that should automatically rollback in the event that the entire stack failed to launch. The application stack requires the pre-requisite packages to be installed first in order for it to run properly, which could take about an hour or so to complete.\n\nWhat should the Engineer add in the template to accomplish this requirement?",
+      "simplifiedQuestion": "How do you configure a CloudFormation stack to wait over an hour for packages to install before marking creation complete?",
+      "choices": [
+        "In the ResourceSignal parameter of the CreationPolicy resource attribute, add a Timeout property with a value of 2 hours.",
+        "In the ResourceSignal parameter of the DependsOn resource attribute, add a Timeout property with a value of 2 hours.",
+        "In the ResourceSignal parameter of the UpdatePolicy resource attribute, add a Timeout property with a value of 2 hours.",
+        "In the ResourceSignal parameter of the Conditions resource attribute, add a Timeout property with a value of 2 hours."
+      ],
+      "correctAnswers": [
+        "In the ResourceSignal parameter of the CreationPolicy resource attribute, add a Timeout property with a value of 2 hours."
+      ],
+      "explanation": "The CreationPolicy attribute prevents a resource's status from reaching CREATE_COMPLETE until CloudFormation receives a success signal or the timeout is exceeded. You can use the cfn-signal helper script to send the signal after installation completes. The Timeout property in ResourceSignal specifies how long CloudFormation waits (maximum 12 hours). The UpdatePolicy attribute is for updating resources, not creation. DependsOn only controls creation order. The Conditions resource section is for conditional resource creation, not signaling."
+    },
+    {
+      "number": 32,
+      "question": "A company plans to set up a deployment process using CloudFormation. The CloudOps Engineer regularly updates the templates to map the latest AMI IDs. Since it takes time to do this all the time, the Administrator needs to look for other ways to streamline and automate this process.\n\nWhich of the following options can satisfy the given requirement?",
+      "simplifiedQuestion": "How can you automate AMI ID updates in CloudFormation templates without manually editing them each time?",
+      "choices": [
+        "Integrate AWS Service Catalog with AWS Config to automatically fetch the latest AMI and use it for succeeding deployments.",
+        "Integrate AWS Service Catalog with CloudFormation to automatically fetch the latest AMI and use it for succeeding deployments.",
+        "Integrate CloudFormation with Systems Manager State Manager to retrieve the latest AMI IDs for your template. Call the update-stack API in CloudFormation whenever you decide to update the EC2 instances in your CloudFormation template.",
+        "Integrate CloudFormation with Systems Manager Parameter Store to retrieve the latest AMI IDs for your template. Call the update-stack API in CloudFormation whenever you decide to update the EC2 instances in your CloudFormation template."
+      ],
+      "correctAnswers": [
+        "Integrate CloudFormation with Systems Manager Parameter Store to retrieve the latest AMI IDs for your template. Call the update-stack API in CloudFormation whenever you decide to update the EC2 instances in your CloudFormation template."
+      ],
+      "explanation": "CloudFormation supports SSM parameter types in its Parameters section. By referencing an SSM Parameter Store key for the latest AMI ID, the stack will automatically use the updated AMI value on the next stack update operation without needing to edit the template. AWS Service Catalog manages catalogs of approved IT services, not AMI IDs. Systems Manager State Manager automates keeping instances in a defined state, not AMI lookups."
+    },
+    {
+      "number": 33,
+      "question": "A company is setting up a static website in AWS, which is written in Angular, that allows users to calculate net worth. The CloudOps Engineer uploaded the website's HTML, JavaScript, CSS, and other media files to an Amazon S3 bucket and then enabled static website hosting. After a month, the website became a hit globally, with over a million users using the site every month. However, there are some complaints about the site loading very slowly in some countries. The Engineer also plans to use AWS CloudWatch RUM to analyze real-user performance data.\n\nWhich of the following options would the CloudOps Engineer use to fix this performance issue?",
+      "simplifiedQuestion": "How do you fix slow load times for a global S3-hosted static website?",
+      "choices": [
+        "Create an Amazon CloudFront web distribution and set the S3 bucket as the source.",
+        "Enable Cross-Region Replication in the S3 bucket.",
+        "Use Amazon ElastiCache as a caching solution for the website.",
+        "Use an Elastic Load Balancer in front of the static website for high availability."
+      ],
+      "correctAnswers": [
+        "Create an Amazon CloudFront web distribution and set the S3 bucket as the source."
+      ],
+      "explanation": "Amazon CloudFront is a CDN that delivers content globally with low latency and high transfer speeds via edge locations closer to users. Setting the S3 bucket as the CloudFront origin will cache and serve static content from edge locations worldwide, dramatically reducing load times. Cross-Region Replication copies objects to another bucket but doesn't solve global latency. ElastiCache is an application-layer cache, not a CDN. An ELB improves availability but exists in one region and cannot solve global latency."
+    },
+    {
+      "number": 34,
+      "question": "An internal data analytics application is deployed on six interdependent EC2 instances in a default VPC. The application can only be accessed by several employees to analyze financial data sets. The CloudOps Engineer noticed high latency in responses as data is transferred between the EC2 instances.\n\nWhich of the following is the MOST effective way to solve this issue?",
+      "simplifiedQuestion": "What is the most effective way to reduce network latency between tightly coupled EC2 instances?",
+      "choices": [
+        "Relaunch the EC2 instances in the same Availability Zone.",
+        "Place the EC2 instances in an Auto Scaling group.",
+        "Relaunch the EC2 instances in a placement group.",
+        "Place the EC2 instances behind an Application Load Balancer configured with a fully qualified domain name (FQDN)."
+      ],
+      "correctAnswers": ["Relaunch the EC2 instances in a placement group."],
+      "explanation": "Placement groups allow you to influence the placement of a group of interdependent instances to meet workload needs. A cluster placement group packs instances close together inside a single Availability Zone, enabling low-latency network performance with up to 10 Gbps per-flow throughput for TCP/IP traffic. Simply relaunching in the same AZ is less effective than a cluster placement group. Auto Scaling addresses capacity, not inter-instance latency. An ALB distributes incoming traffic to instances, not traffic between instances."
+    },
+    {
+      "number": 35,
+      "question": "An organization has an application running in an Auto Scaling group of Amazon EC2 instances. You have been tasked to remotely execute shell scripts and securely manage the configuration of your instances.\n\nWhich of the following could help you achieve this requirement?",
+      "simplifiedQuestion": "Which AWS Systems Manager feature allows you to remotely execute shell scripts and manage configuration on EC2 instances?",
+      "choices": [
+        "Systems Manager Run Command",
+        "Systems Manager Session Manager",
+        "Systems Manager Automation",
+        "Systems Manager Inventory"
+      ],
+      "correctAnswers": ["Systems Manager Run Command"],
+      "explanation": "AWS Systems Manager Run Command lets you remotely and securely manage the configuration of your managed instances. It enables you to automate common administrative tasks and perform ad hoc configuration changes at scale, including executing shell scripts. Session Manager is for interactive shell access to instances, not for bulk automation or script execution. Automation is for creating custom workflows for operational tasks, not remote script execution on managed instances. Inventory collects metadata from instances."
+    },
+    {
+      "number": 36,
+      "question": "A known security vulnerability was discovered in the outdated Operating System of your company's EC2 fleet. As the Systems Administrator, you are responsible in mitigating the vulnerability as soon as possible to safeguard your systems from various cyber security attacks.\n\nWhat is the most efficient way to solve this issue?",
+      "simplifiedQuestion": "What is the most efficient way to quickly apply a security OS patch across an entire EC2 fleet?",
+      "choices": [
+        "Use AWS Systems Manager to manage and deploy the security patch for the OS for the entire fleet of EC2 instances.",
+        "Use EC2Rescue to easily apply the latest security patch for the OS.",
+        "Configure the EC2 fleet to automatically install the security OS patch every week on the provided maintenance window.",
+        "Set up an Intrusion Detection System on your VPC."
+      ],
+      "correctAnswers": [
+        "Use AWS Systems Manager to manage and deploy the security patch for the OS for the entire fleet of EC2 instances."
+      ],
+      "explanation": "AWS Systems Manager Patch Manager automates the process of patching managed instances with security-related updates across fleet of EC2 instances. It supports multiple OS types and can scan and automatically install missing patches across large fleets immediately. Configuring a weekly maintenance window delays remediation of an immediate threat. EC2Rescue is for individual instance troubleshooting, not scalable fleet patching. An IDS detects attacks but does not fix the underlying vulnerability."
+    },
+    {
+      "number": 37,
+      "question": "A company is using IAM policy to manage access to AWS services and resources. Your teammate has recently resigned and handed over a set of CloudFormation templates that she is maintaining to you. You checked the templates and looked at the configured IAM policy for an S3 bucket.\n\nWhat does the following IAM policy allow? (Select TWO.)\n\n{\n   \"Version\": \"2012-10-17\",\n   \"Statement\": [\n     {\n       \"Effect\": \"Allow\",\n       \"Action\": [\n         \"s3:Get*\",\n         \"s3:List*\"\n       ],\n      \"Resource\": \"*\"\n    },\n    {\n      \"Effect\": \"Allow\",\n      \"Action\": \"s3:PutObject\",\n      \"Resource\": \"arn:aws:s3:::tutorialsdojo/*\"\n    }\n  ]\n}",
+      "simplifiedQuestion": "What does this IAM policy allow? The policy grants s3:Get* and s3:List* on all resources, and s3:PutObject on the 'tutorialsdojo' bucket.",
+      "choices": [
+        "An IAM user with this IAM policy is allowed to write objects into the 'tutorialsdojo' S3 bucket.",
+        "An IAM user with this IAM policy is allowed to read objects from all S3 buckets owned by the account.",
+        "An IAM user with this IAM policy is allowed to read and delete objects from the 'tutorialsdojo' S3 bucket.",
+        "An IAM user with this IAM policy is allowed to change access rights for the 'tutorialsdojo' S3 bucket.",
+        "An IAM user with this IAM policy is allowed to read objects in the 'tutorialsdojo' S3 bucket but not allowed to list the objects in the bucket."
+      ],
+      "correctAnswers": [
+        "An IAM user with this IAM policy is allowed to write objects into the 'tutorialsdojo' S3 bucket.",
+        "An IAM user with this IAM policy is allowed to read objects from all S3 buckets owned by the account."
+      ],
+      "explanation": "The first statement allows s3:Get* and s3:List* on all resources (*), meaning the user can read and list objects from all S3 buckets. The second statement allows s3:PutObject on the tutorialsdojo bucket, meaning the user can write objects to it. There is no delete permission (no s3:DeleteObject), so reading and deleting is incorrect. There is no ACL permission, so changing access rights is incorrect. The s3:List* permission means listing objects is allowed, so the 'cannot list' option is incorrect."
+    },
+    {
+      "number": 38,
+      "question": "A startup hosts its web application on a large Spot Fleet that uses tens of Amazon EC2 instances with diversified instance families across multiple Availability Zones. The application is primarily used for integration testing by a group of external customers for their staging environments. The Chief Information Officer(CIO) requires that the Spot Fleet is cost-optimized and less susceptible to application downtime due to Spot instance interruptions.\n\nWhich of the following should the CloudOps Engineer implement to adhere to the CIO requirements?",
+      "simplifiedQuestion": "Which Spot Fleet allocation strategy optimizes cost while minimizing interruptions for a web service workload?",
+      "choices": [
+        "Combine the lowestPrice allocation strategy with the InstancePoolsToUseCount parameter when making a Spot Fleet request.",
+        "Specify the desired target capacity to ensure instance capacity. Indicate the required portion of that capacity to be allocated to On-Demand instances.",
+        "Utilize both Spot pricing and Reserved Instances purchasing for the same instances in the Spot Fleet",
+        "Provision instances up to the Spot Fleet target capacity or the maximum acceptable payment amount."
+      ],
+      "correctAnswers": [
+        "Combine the lowestPrice allocation strategy with the InstancePoolsToUseCount parameter when making a Spot Fleet request."
+      ],
+      "explanation": "Combining lowestPrice with InstancePoolsToUseCount creates an inexpensive yet diversified fleet. For a web service, specifying a high InstancePoolsToUseCount (e.g., 10) distributes instances across multiple low-cost pools, minimizing the impact if one pool becomes temporarily unavailable. Spot Fleet cannot combine Spot instances and Reserved Instances for the same instances. Specifying On-Demand capacity focuses on availability rather than cost. Provisioning up to target capacity or max payment is the default behavior and doesn't specifically optimize for cost or interruption resistance."
+    },
+    {
+      "number": 39,
+      "question": "A company is using AWS CloudFormation to provision a set of AWS resources across multiple regions. The manager noticed that the infrastructure configuration differs from its previous state. As the company's CloudOps Engineer, the task is to identify configuration changes across resources.\n\nWhich of the following could help you achieve this requirement?",
+      "simplifiedQuestion": "How do you detect whether a CloudFormation stack's actual configuration has drifted from its expected state?",
+      "choices": [
+        "Use the drift detection action.",
+        "Create a stack with new resources and delete the existing stack.",
+        "Set the OnFailure parameter to ROLLBACK to revert all changes and return the stack to its previous state.",
+        "Update the stack by using a new CloudFormation template."
+      ],
+      "correctAnswers": ["Use the drift detection action."],
+      "explanation": "CloudFormation drift detection enables you to detect whether a stack's actual configuration differs (has drifted) from its expected configuration as defined in the template. A resource is considered drifted if any actual property values differ from expected values. The OnFailure parameter only applies during stack creation or update failures — it does not detect drift after deployment. Creating a new stack and deleting the existing one doesn't identify configuration changes. Updating the stack with a new template won't tell you what changed."
+    },
+    {
+      "number": 40,
+      "question": "A company plans to develop a NodeJS application that will be hosted on AWS. The application needs to send messages across various sub-components that are hosted in an Auto Scaling group of Amazon EC2 instances, in which the order of the messages should be preserved. Strict rate control is also required to manage the message throughput without breaking the ordering guarantee.\n\nWhich of the following options should be provisioned for this requirement?",
+      "simplifiedQuestion": "Which AWS messaging service preserves message order and supports strict throughput/rate control?",
+      "choices": [
+        "Amazon MQ",
+        "Amazon SQS standard queue",
+        "Amazon SQS FIFO queue",
+        "Amazon SNS Topic"
+      ],
+      "correctAnswers": ["Amazon SQS FIFO queue"],
+      "explanation": "SQS FIFO queues provide First-In-First-Out delivery that strictly preserves the order messages are sent and received. They also support message groups and rate controls to manage throughput without breaking ordering guarantees. Amazon SQS Standard queues do not preserve message order. Amazon SNS is a notification service, not a queue. Amazon MQ is for migrating applications that rely on JMS or protocols like AMQP, MQTT, etc., not for new NodeJS applications."
+    },
+    {
+      "number": 41,
+      "question": "An organization hosts its operating system, database, and application on an Amazon EC2 instance backed by multiple attached Amazon Elastic Block Store (EBS) volumes. The CloudOps Engineer plans to automate the process of taking daily Amazon Machine Images (AMIs). When performing the backups, he has to ensure the file system integrity of created images.\n\nWhat should the CloudOps Engineer do to meet these requirements?",
+      "simplifiedQuestion": "How do you automate daily AMI creation while ensuring file system integrity?",
+      "choices": [
+        "Build a Lambda function using the CreateImage API that will take an AMI of the EC2 instance configured with no-reboot parameter. Then, create a rule to invoke the Lambda function daily on Amazon EventBridge (Amazon CloudWatch Events).",
+        "Using the CreateImage API, build a Lambda function that will take an AMI of the EC2 instance and include a reboot parameter. Then, create a rule to invoke the Lambda function daily on Amazon EventBridge (Amazon CloudWatch Events).",
+        "Using AWS Backup, create a backup plan that runs daily. Assign the resource ID of the instance and set the reboot parameter.",
+        "Using AWS Backup, create a backup plan that runs daily. Assign the resource ID of the instance and set the no-reboot parameter."
+      ],
+      "correctAnswers": [
+        "Using the CreateImage API, build a Lambda function that will take an AMI of the EC2 instance and include a reboot parameter. Then, create a rule to invoke the Lambda function daily on Amazon EventBridge (Amazon CloudWatch Events)."
+      ],
+      "explanation": "To ensure file system integrity, the instance must be rebooted before taking the image. The CreateImage API with a reboot parameter ensures the file system is in a consistent state. A Lambda function can call this API and be triggered daily via EventBridge. AWS Backup does not support the reboot parameter — it uses no-reboot behavior by default, which doesn't guarantee file system integrity. Using the no-reboot parameter on CreateImage also skips the consistency check."
+    },
+    {
+      "number": 42,
+      "question": "A CloudOps Engineer needs to grant a user the ability to pass any of the approved set of roles to the Amazon EC2 service upon launching an instance. This will enable the user to start an EC2 instance with an assigned role. In effect, the applications running on the instance can access temporary credentials for the role through the instance profile metadata.\n\nWhich of the following options should the Engineer implement together to accomplish this requirement? (Select TWO.)",
+      "simplifiedQuestion": "Which two IAM configurations are required to allow a user to pass an approved role to EC2 upon instance launch?",
+      "choices": [
+        "Set up an IAM permissions policy attached to the IAM user that allows the user to pass only those roles that are approved. Afterward, create a Service Control Policy for the role that allows the service to assume the role.",
+        "Set up a Service Control Policy attached to the IAM user that allows the user to pass only those roles that are approved. Afterward, create a trust policy for the role that allows the service to assume the role.",
+        "Set up an IAM permissions policy attached to the IAM Role that determines the actions that it must perform. Afterward, create a trust policy for the role that allows the service to assume the role.",
+        "Set up an IAM permissions policy attached to the IAM user that allows the user to pass only those roles that are approved. Use the iam:PassedToService and iam:GetRolePolicy permissions in order for the user to get the details of the role to be passed.",
+        "Set up an IAM permissions policy attached to the IAM user that allows the user to pass only those roles that are approved. Use the iam:PassRole and iam:GetRole permissions in order for the user to get the details of the role to be passed."
+      ],
+      "correctAnswers": [
+        "Set up an IAM permissions policy attached to the IAM Role that determines the actions that it must perform. Afterward, create a trust policy for the role that allows the service to assume the role.",
+        "Set up an IAM permissions policy attached to the IAM user that allows the user to pass only those roles that are approved. Use the iam:PassRole and iam:GetRole permissions in order for the user to get the details of the role to be passed."
+      ],
+      "explanation": "Three elements are needed: (1) an IAM permissions policy on the role defining what it can do, (2) a trust policy allowing EC2 to assume the role, and (3) an IAM permissions policy on the IAM user granting iam:PassRole and iam:GetRole so they can pass approved roles to EC2. SCPs are for AWS Organizations permission guardrails, not for passing roles to services. iam:PassedToService is a condition key, not a permission. iam:GetRolePolicy retrieves inline policies, not role details needed for passing."
+    },
+    {
+      "number": 43,
+      "question": "An enterprise supply chain application uses Glacier in archiving its data. Compliance controls for individual Glacier vaults must be deployed and enforced by specifying controls like \"write once, read many\" (WORM) in a vault lock policy, which is a resource-based policy that becomes immutable once locked. This ensures that once the Glacier vault is locked, the policy can no longer be changed.\n\nWhich is the most suitable approach to satisfy the given requirement?",
+      "simplifiedQuestion": "Which Glacier feature enforces WORM compliance controls via an immutable, lockable policy?",
+      "choices": [
+        "Use Amazon S3 Glacier Vault Lock.",
+        "Use Amazon S3 Object Lock to enforce WORM policies.",
+        "Set up an Amazon S3 Glacier Data Retrieval Policy.",
+        "Set up an Amazon S3 Glacier vault access policy."
+      ],
+      "correctAnswers": ["Use Amazon S3 Glacier Vault Lock."],
+      "explanation": "Amazon S3 Glacier Vault Lock allows you to deploy and enforce compliance controls for individual Glacier vaults via a vault lock policy. You can specify controls such as WORM and lock the policy to prevent future edits. Once locked, the policy can no longer be changed, ensuring compliance. A vault access policy governs access controls but is not immutable. A Glacier Data Retrieval Policy is for managing retrieval limits and costs. Amazon S3 Object Lock applies to S3 buckets, not Glacier vaults."
+    },
+    {
+      "number": 44,
+      "question": "A company has a newly-hired DevOps Engineer who will assist the IT Manager in developing a fault-tolerant and highly available architecture, which is comprised of an Elastic Load Balancer and an Auto Scaling group of Amazon EC2 instances deployed on multiple AZs. This will be used by a forex trading application that requires WebSockets, host-based and path-based routing, and support for containerized applications.\n\nWhich of the following is the most suitable type of Elastic Load Balancer that the DevOps Engineer should recommend to the IT Manager?",
+      "simplifiedQuestion": "Which ELB type supports WebSockets, host-based routing, path-based routing, and containerized applications?",
+      "choices": [
+        "Application Load Balancer",
+        "Gateway Load Balancer",
+        "Either a Gateway Load Balancer or a Network Load Balancer",
+        "Network Load Balancer"
+      ],
+      "correctAnswers": ["Application Load Balancer"],
+      "explanation": "Application Load Balancers operate at Layer 7 (OSI) and support WebSockets, path-based routing, host-based routing, and containerized applications. These are all required by the forex trading application. Gateway Load Balancer is designed for deploying third-party security appliances and does not support application-layer routing. Network Load Balancer operates at Layer 4 and lacks host-based and path-based routing capabilities."
+    },
+    {
+      "number": 45,
+      "question": "A leading tech consultancy firm has an AWS Virtual Private Cloud (VPC) with one public subnet. They have recently deployed a new blockchain application to an EC2 instance. After a month, management has decided that the application should be modified to also support IPv6 addresses.\n\nWhich of the following should you do to satisfy the requirement?",
+      "simplifiedQuestion": "What are the correct steps to enable IPv6 support for an existing AWS VPC and EC2 instance?",
+      "choices": [
+        "1. Associate a NAT Gateway with your VPC and Subnets\n2. Update the Route Tables and Security Group Rules\n3. Enable Enhanced Networking in your EC2 instance\n4. Assign IPv6 Addresses to the EC2 Instance",
+        "1. Attach an Egress-Only Internet Gateway to the VPC and Subnets\n2. Update the Route Tables\n3. Update the Security Group Rules\n4. Assign IPv6 Addresses to the EC2 instance",
+        "1. Enable Enhanced Networking in your EC2 instance\n2. Update the Route Tables\n3. Update the Security Group Rules\n4. Assign IPv6 Addresses to the EC2 Instance",
+        "1. Associate an IPv6 CIDR Block with the VPC and Subnets\n2. Update the Route Tables\n3. Update the Security Group Rules\n4. Assign IPv6 Addresses to the EC2 Instance"
+      ],
+      "correctAnswers": [
+        "1. Associate an IPv6 CIDR Block with the VPC and Subnets\n2. Update the Route Tables\n3. Update the Security Group Rules\n4. Assign IPv6 Addresses to the EC2 Instance"
+      ],
+      "explanation": "To add IPv6 support to an existing VPC: (1) associate an Amazon-provided IPv6 CIDR block with your VPC and subnets, (2) update route tables to route IPv6 traffic to the Internet gateway (public subnet) or egress-only gateway (private subnet), (3) update security group rules to include IPv6 address ranges, and (4) assign IPv6 addresses to instances. Enhanced Networking improves performance but is unrelated to IPv6. An Egress-Only Internet Gateway is only for private subnets with outbound-only access. A NAT Gateway does not support IPv6."
+    },
+    {
+      "number": 46,
+      "question": "An online stock trading application is extensively using an Amazon S3 bucket with Cross-Region Replication to store client data. To comply with financial regulatory requirements, it is necessary to generate a report on the replication and encryption status of all objects stored in the bucket. The report should show which type of server-side encryption is being used by each object.\n\nHow can the CloudOps Engineer of the company meet the above requirement with the LEAST amount of effort?",
+      "simplifiedQuestion": "What is the easiest way to generate a report on the replication and encryption status of all S3 objects?",
+      "choices": [
+        "Use S3 Analytics to generate the report and Amazon Athena to query the data.",
+        "Use S3 Inventory to generate the required report.",
+        "Create a custom script which uses the GET and List bucket inventory REST APIs to generate the required report.",
+        "Use S3 Object Lambda to transform data on the fly, extracting and reporting each object's encryption and replication status."
+      ],
+      "correctAnswers": ["Use S3 Inventory to generate the required report."],
+      "explanation": "Amazon S3 Inventory provides CSV, ORC, or Parquet output files listing objects and their corresponding metadata — including replication and encryption status — on a daily or weekly basis. It is the purpose-built tool for auditing and reporting on object replication and encryption status. S3 Analytics is for analyzing storage access patterns to help with storage class transitions. Building a custom script requires more effort. S3 Object Lambda is for transforming objects on retrieval, not for bulk metadata reporting."
+    },
+    {
+      "number": 47,
+      "question": "A DevOps Engineer reported a problem accessing his EC2 instance with a private IP address of 172.31.8.11 from his corporate laptop. The EC2 instance is hosting a web application which works well but he is still experiencing an issue establishing a connection to manage the instance. As the CloudOps Engineer, which of the following options is the most suitable solution in this scenario based on the VPC flow log entries below?\n\n2 123456789010 eni-abc123de 110.217.100.70 172.31.8.11 49761 3389 6 20 4249 1418530010 1418530070 REJECT OK",
+      "simplifiedQuestion": "A VPC flow log shows RDP traffic (port 3389) from 110.217.100.70 to 172.31.8.11 was REJECTED. How do you fix it?",
+      "choices": [
+        "Allow incoming RDP traffic in the security group of the EC2 instance including the inbound and outbound rules in the Network ACL.",
+        "Based on the log, the DevOps Engineer's IP address is actually 172.31.8.11 and not 110.217.100.70 which is what the user reported. Tell the user to connect to the 110.217.100.70 IP address instead.",
+        "Attach an Elastic IP address to the EC2 instance.",
+        "Based on the log, the DevOps Engineer's IP address is 110.217.100.70 which is not whitelisted to access the instance. Add an inbound rule in the security group to allow SSH traffic to the instance coming from this specific IP address."
+      ],
+      "correctAnswers": [
+        "Allow incoming RDP traffic in the security group of the EC2 instance including the inbound and outbound rules in the Network ACL."
+      ],
+      "explanation": "The VPC flow log shows: source IP 110.217.100.70 (DevOps engineer's laptop), destination IP 172.31.8.11 (EC2 instance), destination port 3389 (RDP), action REJECT. This means RDP traffic is being rejected. The fix is to allow RDP traffic (port 3389) in both the security group inbound rules and the Network ACL inbound/outbound rules. Adding an Elastic IP won't fix the NACL/SG issue. The DevOps engineer's IP is 110.217.100.70, not 172.31.8.11. The protocol is RDP (port 3389), not SSH (port 22)."
+    },
+    {
+      "number": 48,
+      "question": "A financial organization has created a custom KMS key with imported key material. The key is used to encrypt the data of a Java web application. To meet strict security compliance requirements, the KMS key must be rotated every 6 months.\n\nWhich of the following could help you achieve this requirement?",
+      "simplifiedQuestion": "How do you rotate a KMS key with imported key material every 6 months?",
+      "choices": [
+        "Set up a new customer managed key with imported key material. Update the key alias or key ID to point to the new KMS key.",
+        "Rotate the keys automatically by using AWS managed key.",
+        "Enable automatic key rotation.",
+        "Replace the existing key material of the current KMS key with a new one."
+      ],
+      "correctAnswers": [
+        "Set up a new customer managed key with imported key material. Update the key alias or key ID to point to the new KMS key."
+      ],
+      "explanation": "Automatic key rotation is not supported for KMS keys with imported key material. You must rotate them manually by creating a new KMS key with new imported key material and then updating the application to use the new key alias or key ID. You cannot import different key material into an existing KMS key. AWS managed keys automatically rotate approximately every 365 days, which does not satisfy the 6-month requirement."
+    },
+    {
+      "number": 49,
+      "question": "A government organization has implemented a file gateway to keep copies of the home drives of their employees in a separate S3 bucket. As the CloudOps Engineer, you noticed that most files are rarely accessed after 60 days but it is required that the files should still be available immediately in the event of a surprise audit.\n\nIn this scenario, what can you do to reduce the storage costs while continuing to provide access to the files for the employees?",
+      "simplifiedQuestion": "How do you reduce S3 storage costs for files rarely accessed after 60 days while keeping them immediately available?",
+      "choices": [
+        "Create a lifecycle policy to move files older than 60 days to Glacier Deep Archive storage class.",
+        "Set up an S3 bucket policy to limit user access to only newer files that are created in less than 60 days.",
+        "Enable versioning on the S3 bucket.",
+        "Set up a lifecycle policy that moves the employee files older than 60 days to Infrequent Access storage class."
+      ],
+      "correctAnswers": [
+        "Set up a lifecycle policy that moves the employee files older than 60 days to Infrequent Access storage class."
+      ],
+      "explanation": "S3 Standard-IA is designed for long-lived but less frequently accessed data. It provides the same multi-AZ durability and immediate access as S3 Standard at a lower storage cost, with a retrieval fee. This satisfies the requirement for immediate availability during audits while reducing costs. Glacier Deep Archive is very inexpensive but takes hours to restore — not suitable for surprise audits. S3 Bucket Policy manages access permissions, not storage lifecycle. S3 Versioning stores multiple versions of objects and increases costs."
+    },
+    {
+      "number": 50,
+      "question": "A SysOps team is in the process of automating tasks to expedite the time to recover Amazon instances in the event of underlying hardware failure. The team must ensure that the attached Elastic IP and the private IP address of the original instance are retained after the instance is recovered. Additionally, an automated email notification should be in place to inform everyone in the SysOps team once a recovery process is triggered to run.\n\nWhich steps should the SysOps team perform to meet the requirements?",
+      "simplifiedQuestion": "How do you automate EC2 instance recovery from hardware failure while retaining the Elastic IP and notifying the team?",
+      "choices": [
+        "Build an Auto Scaling Group using a launch template that specifies the private IP address and Elastic IP address that you need. Configure the Auto Scaling group to deploy instances across two different subnets in the same Availability Zone. Set the minimum, maximum, and desired size to 1. Then, create an activity notification for the Auto Scaling group to send an email message to the CloudOps team via Amazon Simple Queue Service (Amazon SQS).",
+        "Create an Amazon SNS topic and subscribe everyone in the CloudOps team using their corporate emails. Then, configure an Amazon CloudWatch alarm for the EC2 instance and specify StatusCheckFailed_System as the metric. Finally, create an alarm notification that publishes a message to the SNS topic that you just created.",
+        "Create an Amazon CloudWatch alarm with the StatusCheckFailed_Instance metric. Configure the alarm to publish a message to an Amazon SNS topic. Subscribe an AWS Lambda function to the SNS topic, and in the Lambda function, call the ReleaseAddress API to release the Elastic IP address before automatically recovering the instance. Finally, create a notification to send a message to the CloudOps team via the SNS topic.",
+        "Create an Auto Scaling Group that is configured to deploy instances across three Availability Zones. Set the minimum, maximum, and desired size to 1. Use a launch template that explicitly specifies the Elastic IP address and private IP address that you need to use. Then, create an activity notification for the Auto Scaling group to send an email message to the CloudOps team via Amazon Simple Queue Service (Amazon SQS)."
+      ],
+      "correctAnswers": [
+        "Create an Amazon SNS topic and subscribe everyone in the CloudOps team using their corporate emails. Then, configure an Amazon CloudWatch alarm for the EC2 instance and specify StatusCheckFailed_System as the metric. Finally, create an alarm notification that publishes a message to the SNS topic that you just created."
+      ],
+      "explanation": "A CloudWatch alarm on the StatusCheckFailed_System metric automatically recovers the EC2 instance when underlying hardware fails. A recovered instance retains the same instance ID, private IP, Elastic IP, and instance metadata. Subscribing the team's emails to an SNS topic attached to the alarm handles email notifications automatically. You do not need an Auto Scaling group for this. Calling the ReleaseAddress API would permanently release the Elastic IP, violating the retention requirement. Amazon SQS is a queue service and cannot directly send email notifications."
+    },
+    {
+      "number": 51,
+      "question": "A pharmaceutical company has a hybrid cloud architecture. The company has a fleet of Amazon EC2 instances in its VPC and a group of servers in its on-premises data center. The CloudOps Engineer is instructed by the manager to set up a unified dashboard monitoring system for both the EC2 instances as well as the on-premises servers.\n\nWhich of the following options should the Engineer do to satisfy the given requirement? (Select TWO.)",
+      "simplifiedQuestion": "Which two steps allow you to monitor both EC2 instances and on-premises servers in a single CloudWatch dashboard?",
+      "choices": [
+        "Enable AWS CloudTrail Event History for the EC2 instances.",
+        "Install the Amazon CloudWatch Agent on both EC2 Instances and On-Premises servers.",
+        "Install the Amazon CloudWatch Agent on the EC2 Instances only. Set up a custom monitoring tool for the On-Premises servers that publish metrics to CloudWatch in real-time.",
+        "Set up the metrics dashboard in Amazon CloudWatch.",
+        "Install the Amazon Inspector Agent."
+      ],
+      "correctAnswers": [
+        "Install the Amazon CloudWatch Agent on both EC2 Instances and On-Premises servers.",
+        "Set up the metrics dashboard in Amazon CloudWatch."
+      ],
+      "explanation": "The unified CloudWatch agent can be installed on both EC2 instances and on-premises servers to collect system-level metrics and logs. Amazon CloudWatch dashboards provide customizable views of metrics from all sources, including across regions. CloudTrail Event History is for API logging, not system metrics. Installing the agent only on EC2 instances and using a custom tool for on-premises is unnecessary complexity. Amazon Inspector Agent collects package and configuration info for security assessments, not monitoring metrics."
+    },
+    {
+      "number": 52,
+      "question": "A media organization recently adopted a hybrid cloud architecture to save costs and to take advantage of the various AWS cloud products. The organization has a public website that is deployed to two AWS regions: US East (Ohio) and Asia Pacific (Tokyo), to improve its services in Asia. The Geolocation routing policy by country is insufficient. The organization needs consistent routing to the nearest region.\n\nAs a CloudOps Engineer, which of the following should be implemented to ensure that users are consistently directed to the nearest AWS region?",
+      "simplifiedQuestion": "Which Route 53 routing policy consistently routes users to the nearest AWS region based on their geographic location?",
+      "choices": [
+        "Use a third-party geolocation service and redirect the users to the nearest AWS Region based on their country.",
+        "Set up an Amazon Route 53 Geoproximity routing policy to direct users in Asia to their website.",
+        "Set up an Amazon Route 53 Latency-based routing for the website.",
+        "Set up the Application Load Balancer of the website to route the incoming traffic to the nearest AWS Region based on the country."
+      ],
+      "correctAnswers": [
+        "Set up an Amazon Route 53 Geoproximity routing policy to direct users in Asia to their website."
+      ],
+      "explanation": "Geoproximity routing routes traffic based on the geographic location of users and resources, with optional bias values to adjust the size of the routing region. It consistently routes users to the nearest AWS region. Latency-based routing minimizes latency but is not guaranteed to be geographically consistent — it reacts to network conditions. Application Load Balancers cannot route traffic across multiple AWS regions. A third-party service is unnecessary when Route 53 Geoproximity routing provides this capability."
+    },
+    {
+      "number": 53,
+      "question": "A leading energy company is trying to establish a static VPN connection between an on-premises network and its VPC in AWS. As a CloudOps Engineer, the engineer created the required virtual private gateway, customer gateway, and VPN connection, including the router configuration on the customer side. Although the AWS VPN connection status seems okay in the console, the connection is not entirely working when connecting to an Amazon EC2 instance in its VPC from one of the on-premises virtual machines.\n\nHow can this issue be resolved?",
+      "simplifiedQuestion": "A Site-to-Site VPN shows as UP but on-premises VMs can't reach EC2 instances. What's the fix?",
+      "choices": [
+        "Add a Virtual Private Gateway (VGW) route with the destination of your on-premises network in the route table.",
+        "Create a VPC endpoint.",
+        "Add a Customer Gateway (CGW) route with the destination of your on-premises network in the route table.",
+        "Add an Internet gateway (IGW) route with a destination of 0.0.0.0/0 for IPv4 traffic or ::/0 for IPv6 traffic in the route table."
+      ],
+      "correctAnswers": [
+        "Add a Virtual Private Gateway (VGW) route with the destination of your on-premises network in the route table."
+      ],
+      "explanation": "For a Site-to-Site VPN to work, the VPC route table must include routes that direct on-premises-bound traffic through the Virtual Private Gateway. Even though the VPN connection status shows UP, if the route table lacks a VGW route to the on-premises CIDR, traffic from the VPC to on-premises won't flow. Adding a VGW route with the on-premises network destination resolves this. A VPC endpoint is for private AWS service connectivity. An IGW route is for internet traffic. The customer gateway configuration is already in place per the scenario."
+    },
+    {
+      "number": 54,
+      "question": "A company deployed a fleet of Linux-based Amazon EC2 instances to run an e-commerce website. The CloudOps Engineer needs to monitor the CPU utilization of individual processes that are running on each server.\n\nWhich of the following options fulfills this requirement?",
+      "simplifiedQuestion": "How do you monitor CPU utilization of individual processes on EC2 instances using CloudWatch?",
+      "choices": [
+        "Use Amazon CloudWatch agent procstat plugin to collect process metrics on EC2 instances.",
+        "Use AWS Systems Manager agent procstat plugin to collect process metrics on EC2 instances.",
+        "Enable detailed monitoring on EC2 instances.",
+        "Install Amazon Inspector agent on EC2 instances."
+      ],
+      "correctAnswers": [
+        "Use Amazon CloudWatch agent procstat plugin to collect process metrics on EC2 instances."
+      ],
+      "explanation": "The CloudWatch agent procstat plugin enables you to collect metrics from individual processes on Linux and Windows servers. You configure it by specifying processes using pid_file, exe, or pattern methods. The procstat plugin is part of the CloudWatch agent, not the SSM agent. Detailed monitoring sends metrics at 1-minute intervals but only provides instance-level EC2 metrics, not per-process metrics. Amazon Inspector agent collects installed package information and software configurations for security assessments."
+    },
+    {
+      "number": 55,
+      "question": "A company has a requirement to connect their on-premises network to a new VPC on AWS to complete their hybrid cloud architecture. As the CloudOps Engineer of the company, you are responsible in both managing their cloud infrastructure as well as establishing connectivity to their other corporate data centers.\n\nWhich of the following should provide your resources on AWS the connectivity to external networks? (Select TWO.)",
+      "simplifiedQuestion": "Which two VPC components provide connectivity to external networks (Internet and on-premises)?",
+      "choices": [
+        "Assign an Elastic IP to your EC2 instances",
+        "Create additional ENI for the dedicated connection to the on-premises data center",
+        "Enable AWS enhanced networking on your instances",
+        "Assign an Internet Gateway to the VPC",
+        "Assign a Public IP to your EC2 instances",
+        "Create a Virtual Private Gateway"
+      ],
+      "correctAnswers": [
+        "Assign an Internet Gateway to the VPC",
+        "Create a Virtual Private Gateway"
+      ],
+      "explanation": "An Internet Gateway connects the VPC to the public Internet. A Virtual Private Gateway enables VPN connectivity to on-premises networks. Together, they provide the connectivity to external networks required for a hybrid cloud architecture. Elastic IPs and Public IPs alone don't provide connectivity without an Internet Gateway. Additional ENIs add network interfaces but don't establish connectivity to external networks. Enhanced Networking improves performance (bandwidth and latency) but doesn't enable external network connectivity."
+    },
+    {
+      "number": 56,
+      "question": "An organization hosts an application across multiple Amazon EC2 instances backed by an Amazon Elastic File System (Amazon EFS) file system. While monitoring the instances, the CloudOps Engineer noticed that the file system's PercentIOLimit metric consistently hit 100% for 20 minutes or longer. This issue resulted in the poor performance of the application that reads and writes data into the file system. The CloudOps Engineer needs to ensure high throughput and IOPS while accessing the file system.\n\nWhat step should be performed to resolve the high PercentIOLimit metric on the file system?",
+      "simplifiedQuestion": "What should you do when an EFS file system's PercentIOLimit consistently hits 100%?",
+      "choices": [
+        "Build a new EFS file system that is configured with Max I/O performance mode. Utilize AWS DataSync to migrate data to the newly created EFS file system.",
+        "Modify the existing EFS file system configuration and activate Max I/O performance mode.",
+        "Activate Provisioned Throughput mode in the existing EFS file system.",
+        "Create an EFS lifecycle policy that transitions new files to Infrequent Access (IA) storage class to achieve better performance. Migrate current data to IA storage using AWS DataSync."
+      ],
+      "correctAnswers": [
+        "Build a new EFS file system that is configured with Max I/O performance mode. Utilize AWS DataSync to migrate data to the newly created EFS file system."
+      ],
+      "explanation": "When PercentIOLimit consistently hits 100%, the file system should move to Max I/O performance mode. However, you cannot change the performance mode of an existing EFS file system — you must create a new file system with Max I/O performance mode and migrate data using AWS DataSync. You cannot modify the performance mode of an existing EFS file system in place. Provisioned Throughput mode is best when data volume is low relative to throughput demands, not when PercentIOLimit is saturated. EFS lifecycle policies only affect storage costs, not performance."
+    },
+    {
+      "number": 57,
+      "question": "A real-estate company is hosting a website on a set of Amazon EC2 instances behind an Application Load Balancer. The CloudOps Engineer used CloudFront for its content distribution and set the ALB as the origin. He also created a CNAME record in Route 53 that sends all traffic through the CloudFront distribution. Users started to report that they are being served with the desktop version of the website when using mobile phones.\n\nWhich action can help the CloudOps Engineer resolve the issue?",
+      "simplifiedQuestion": "How do you configure CloudFront to serve different content versions based on whether the user is on mobile or desktop?",
+      "choices": [
+        "Update the CloudFront distribution origin settings. Add a User-Agent header to the list of origin custom headers.",
+        "Create a CloudFront invalidation request to clear cached objects and refresh content stored at edge locations.",
+        "Set the cache behavior of the CloudFront distribution to forward the User-Agent header.",
+        "Activate the Enable IPv6 setting on the Application Load Balancer (ALB). Update origin settings of the CloudFront distribution to use the dualstack endpoint."
+      ],
+      "correctAnswers": [
+        "Update the CloudFront distribution origin settings. Add a User-Agent header to the list of origin custom headers."
+      ],
+      "explanation": "CloudFront sets special device-type headers (CloudFront-Is-Desktop-Viewer, CloudFront-Is-Mobile-Viewer, etc.) based on the value of the User-Agent header. To use these headers, you must add the User-Agent header to the list of origin custom headers in the CloudFront distribution's origin settings. You cannot configure CloudFront cache behaviors to forward the User-Agent header to the origin — this is configured in Origin Custom Headers. CloudFront invalidation clears the cache but doesn't solve the device-type routing issue. IPv6/dualstack is unrelated to device detection."
+    },
+    {
+      "number": 58,
+      "question": "A cloud-based pharmaceutical website uses an Elastic Load Balancer to delegate traffic among EC2 instances on an Auto Scaling Group. In addition, the public website provides HTTPS security by adding a TLS certificate on the load balancer.\n\nAfter a year, the website experienced an outage and the new CloudOps Engineer noticed that the certificate added on the load balancer expired. She needs to find a solution to automate the renewal of the TLS certificate to prevent this issue from happening again.\n\nWhich among the options is the MOST operationally efficient approach that meets the requirement?",
+      "simplifiedQuestion": "What is the most operationally efficient way to prevent TLS certificate expiration on a public-facing ELB?",
+      "choices": [
+        "Generate a new public certificate from a third-party certificate authority (CA). Import the certificate to AWS Certificate Manager (ACM) to automatically manage the certificate renewal. Configure the certificate from ACM with the load balancer.",
+        "Request a private certificate from a third-party certificate authority (CA). Set the load balancer to import the certificate from the CA and configure a reload cycle to renew the certificate every six months.",
+        "Use AWS Certificate Manager to request a public certificate. Then, attach the new certificate to the load balancer and write a Lambda function to renew the certificate every twelve months.",
+        "Go to AWS Certificate Manager (ACM) and request a public certificate from Amazon. Associate the newly requested certificate from ACM with the ELB. No additional configurations are needed since ACM can automatically manage the renewal of certificates."
+      ],
+      "correctAnswers": [
+        "Go to AWS Certificate Manager (ACM) and request a public certificate from Amazon. Associate the newly requested certificate from ACM with the ELB. No additional configurations are needed since ACM can automatically manage the renewal of certificates."
+      ],
+      "explanation": "ACM provides managed automatic renewal for Amazon-issued SSL/TLS certificates associated with AWS services like ELB. Requesting a certificate directly from ACM and attaching it to the ELB requires no further configuration — ACM handles renewal automatically. Third-party certificates imported into ACM are NOT automatically renewed. Building a Lambda function for renewal adds unnecessary complexity. You cannot configure a load balancer to directly import and renew certificates from a CA on a schedule."
+    },
+    {
+      "number": 59,
+      "question": "An aerospace engineering company is having some issues in expanding its on-premises storage capabilities. The cost of upgrading its storage servers is too high, and it needs to find a more cost-effective option. The CTO decided to adopt a hybrid cloud architecture using AWS to extend the storage for its applications. The new storage should be available as an iSCSI target, which should be accessed by the servers in the on-premises data center. The company also plans to use AWS Backup to centrally protect the stored data with automated backup schedules.\n\nWhich of the following options should be used to meet this requirement?",
+      "simplifiedQuestion": "Which AWS service provides iSCSI storage accessible from on-premises servers in a hybrid architecture?",
+      "choices": [
+        "AWS DataSync",
+        "Amazon EBS",
+        "Amazon S3",
+        "AWS Storage Gateway"
+      ],
+      "correctAnswers": ["AWS Storage Gateway"],
+      "explanation": "AWS Storage Gateway's Volume Gateway presents cloud-based storage volumes to on-premises applications as iSCSI devices. It integrates with AWS Backup for centralized backup protection. Amazon EBS is block storage for EC2 instances within the VPC, not for on-premises servers. AWS DataSync is a data transfer service, not a storage service. Amazon S3 is object storage — you'd need Storage Gateway to present it as an iSCSI target to on-premises applications."
+    },
+    {
+      "number": 60,
+      "question": "As part of the yearly AWS data cleanup, you need to delete all unused S3 buckets and their contents. The tutorialsdojo bucket, which contains several educational video files, has both the Versioning and MFA Delete features enabled. One of your Systems Engineers who have an Administrator account tried to delete an S3 bucket using the aws s3 rb s3://tutorialsdojo command. However, the operation fails even after repeated attempts.\n\nWhich of the following are valid options that you can implement to properly delete the bucket? (Select TWO.)",
+      "simplifiedQuestion": "How do you properly delete an S3 bucket that has both Versioning and MFA Delete enabled?",
+      "choices": [
+        "Use the aws s3 rb s3://tutorialsdojo command again with an additional --force option to forcibly delete the bucket via the CLI.",
+        "Remove the policy that requires MFA Delete on your S3 bucket. Use the AWS SDK to remove all of the bucket's delete markers and object versions. Delete the bucket again using the same CLI command that you used before.",
+        "Use the AWS SDK to send deletion requests to S3 to remove all objects in your bucket. Ensure that you include the x-amz-mfa header in all requests which contain the MFA authentication code. Afterward, retry to delete the bucket with the same CLI command that you used before.",
+        "Have the root account owner suspend MFA and versioning in the bucket. Configure a lifecycle rule to expire current object versions and permanently remove non-current object versions. Permanently purge all objects and delete markers then delete your bucket again.",
+        "Delete all markers from the S3 bucket and then run the aws s3 rb s3://tutorialsdojo command again to fully delete the bucket and its contents."
+      ],
+      "correctAnswers": [
+        "Remove the policy that requires MFA Delete on your S3 bucket. Use the AWS SDK to remove all of the bucket's delete markers and object versions. Delete the bucket again using the same CLI command that you used before.",
+        "Have the root account owner suspend MFA and versioning in the bucket. Configure a lifecycle rule to expire current object versions and permanently remove non-current object versions. Permanently purge all objects and delete markers then delete your bucket again."
+      ],
+      "explanation": "To delete a bucket with Versioning and MFA Delete enabled, you must first remove MFA Delete (only the bucket owner/root account can do this) and then remove all object versions and delete markers before deleting the bucket. The --force flag only works for non-versioned, non-empty buckets. Including the x-amz-mfa header deletes MFA-protected objects but doesn't remove delete markers, which are still required before deleting the bucket. Removing only delete markers without also removing object versions is insufficient."
+    },
+    {
+      "number": 61,
+      "question": "A large insurance firm relies heavily on AWS as its cloud infrastructure. The operations team requires a monitoring system that enables rapid response to incidents affecting the production environment. There should be a dashboard that contains the CPUUtilization, DiskReadOps, NetworkIn, and other metrics for all Amazon EC2 instances at one-minute intervals.\n\nWhich of the following actions should be taken to properly implement this system? (Select TWO.)",
+      "simplifiedQuestion": "How do you set up a monitoring dashboard with 1-minute interval metrics for EC2 instances?",
+      "choices": [
+        "Enable basic monitoring for the EC2 instances in Amazon CloudWatch.",
+        "Enable detailed monitoring for the EC2 instances.",
+        "Set up a dashboard in AWS CloudTrail.",
+        "Use the AWS Service Health Dashboard.",
+        "Set up an Amazon CloudWatch dashboard."
+      ],
+      "correctAnswers": [
+        "Enable detailed monitoring for the EC2 instances.",
+        "Set up an Amazon CloudWatch dashboard."
+      ],
+      "explanation": "Detailed monitoring for EC2 sends metric data to CloudWatch at 1-minute intervals (vs. the default 5-minute intervals for basic monitoring). Amazon CloudWatch dashboards let you create customizable views of metrics and alarms across resources, including in a single view. Basic monitoring only provides 5-minute interval data, which doesn't meet the 1-minute requirement. CloudTrail is for API activity logging, not metrics dashboards. The AWS Service Health Dashboard shows the health of AWS services globally, not your specific resources."
+    },
+    {
+      "number": 62,
+      "question": "A CloudOps Engineer is managing a web application hosted in an Amazon EC2 instance. The security groups and network ACLs are configured to allow HTTP and HTTPS traffic in the instance. A manager has received a report that a customer cannot access the application. The CloudOps Engineer is instructed to investigate if the traffic is reaching the instance. EC2's basic monitoring provides CPU metrics only, which is insufficient for this investigation.\n\nWhich of the following is the best approach to satisfy this requirement?",
+      "simplifiedQuestion": "Which AWS feature lets you investigate whether network traffic is actually reaching an EC2 instance?",
+      "choices": [
+        "Use Amazon CloudWatch Logs",
+        "Use AWS CloudTrail Logs",
+        "Use Amazon VPC Flow Logs",
+        "Use AWS ELB Access Logs"
+      ],
+      "correctAnswers": ["Use Amazon VPC Flow Logs"],
+      "explanation": "VPC Flow Logs capture information about IP traffic going to and from network interfaces in your VPC, including whether traffic was accepted or rejected. This helps diagnose whether traffic is reaching the instance and identify overly restrictive security group rules or NACLs. CloudWatch Logs is a centralized log aggregation service and doesn't inherently capture IP traffic flow data. CloudTrail logs API calls, not IP traffic. ELB Access Logs are disabled by default and require an ELB in the architecture."
+    },
+    {
+      "number": 63,
+      "question": "A leading media company plans to launch a data analytics application. The CloudOps Engineer designed an architecture to use On-Demand EC2 instances in an Auto Scaling group that read messages from an SQS queue. A month after, the new application has been deployed to production but the Operations team noticed that when the incoming message traffic increases, the EC2 instances fall behind and it takes too long to process the messages.\n\nHow can the CloudOps Engineer configure the current cloud architecture to reduce the latency during traffic spikes?",
+      "simplifiedQuestion": "How do you configure Auto Scaling to handle traffic spikes from an SQS queue dynamically?",
+      "choices": [
+        "Configure the Auto Scaling group to scale out based on the number of messages in the SQS queue.",
+        "Configure the Auto Scaling group to scale out based on the disk space used of the EC2 instances.",
+        "Set up a CloudWatch Alarm and upgrade the Auto Scaling group's capacity only when the incoming traffic spikes.",
+        "In the Auto Scaling group, configure the scale out policy to add more EC2 instances based on given schedule."
+      ],
+      "correctAnswers": [
+        "Configure the Auto Scaling group to scale out based on the number of messages in the SQS queue."
+      ],
+      "explanation": "Configuring the Auto Scaling group to scale based on the number of SQS messages (ApproximateNumberOfMessagesVisible metric) provides dynamic scaling that directly correlates with processing demand. When message volume increases, more instances are launched; when it decreases, instances are terminated. Scaling based on disk space is unrelated to message processing latency. A CloudWatch Alarm triggered only on traffic spikes is reactive and may be slower to scale. Scheduled scaling cannot adapt to real-time unexpected traffic patterns."
+    },
+    {
+      "number": 64,
+      "question": "An organization is using Amazon EC2 instances to host a web application. A CloudOps engineer has been assigned to set up an alert using an event bus to notify the IT Operations team when EC2 instance service limits are nearing capacity.\n\nWhich of the following solutions can satisfy the given requirement?",
+      "simplifiedQuestion": "How do you set up an EventBridge alert to notify the team when EC2 service limits are nearing capacity?",
+      "choices": [
+        "Create an alert using an Amazon EventBridge rule and Amazon Cognito.",
+        "Create an alert using an Amazon EventBridge rule and AWS Service Health Dashboard.",
+        "Create an alert using an Amazon EventBridge rule with the AWS Trusted Advisor service quota metric.",
+        "Create an alert using an Amazon EventBridge rule and AWS CloudTrail."
+      ],
+      "correctAnswers": [
+        "Create an alert using an Amazon EventBridge rule with the AWS Trusted Advisor service quota metric."
+      ],
+      "explanation": "AWS Trusted Advisor provides service quota checks that monitor usage against AWS service limits. Trusted Advisor service quota metrics are published to CloudWatch and EventBridge, allowing you to create EventBridge rules that trigger alerts when EC2 service limits approach capacity. Amazon Cognito is an identity and access management service for apps, not for service limit monitoring. The Service Health Dashboard only shows regional AWS service availability, not account-specific service quota usage. CloudTrail is for API logging, not service quota monitoring."
+    },
+    {
+      "number": 65,
+      "question": "A CloudOps Engineer needs to install and configure software applications to an EC2 instance that will be deployed using CloudFormation. The Engineer has to ensure that the applications are properly running before the stack creation proceeds.\n\nWhich of the following options can satisfy the given requirement?",
+      "simplifiedQuestion": "How do you ensure software applications on an EC2 instance are running before CloudFormation stack creation proceeds?",
+      "choices": [
+        "Use the DependsOn attribute and send a success signal after the applications are installed and configured using the cfn-init helper script.",
+        "Add a UpdatePolicy attribute to the instance then send a success signal after the applications are installed and configured. Use the cfn-signal helper script to signal a resource.",
+        "Add a CreationPolicy attribute to the instance then send a success signal after the applications are installed and configured. Use the cfn-signal helper script to signal a resource.",
+        "Use the UpdateReplacePolicy attribute and send a success signal after the applications are installed and configured using the cfn-signal helper script."
+      ],
+      "correctAnswers": [
+        "Add a CreationPolicy attribute to the instance then send a success signal after the applications are installed and configured. Use the cfn-signal helper script to signal a resource."
+      ],
+      "explanation": "The CreationPolicy attribute prevents a resource from reaching CREATE_COMPLETE status until CloudFormation receives the specified number of success signals or the timeout expires. The cfn-signal helper script is used to send success signals from the EC2 instance after applications are installed and configured. This ensures stack creation waits until the instance is fully ready. The DependsOn attribute controls creation order but doesn't wait for application configuration signals; cfn-init is for configuration, not signaling. UpdatePolicy applies to updates, not initial creation. UpdateReplacePolicy retains or backs up existing resources during replacement."
+    }
+  ]
+}
