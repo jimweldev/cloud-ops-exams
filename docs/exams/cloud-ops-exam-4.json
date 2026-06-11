@@ -417,7 +417,7 @@
     {
       "number": 28,
       "question": "A leading advertising company is using Lambda to run a serverless application in AWS. The application processes transactions on an Amazon RDS database instance with MySQL support. As the company grows, the number of users has started to increase. As a result, your Lambda function is beginning to receive “too many connections” errors when attempting to connect to the RDS database. When the CloudOps Engineer checked the database settings, the max_connections parameter is already set to the maximum possible value.\n\nWhat step should the CloudOps Engineer perform to resolve the issue?",
-      "simplifiedQuestion": "How do you resolve \\",
+      "simplifiedQuestion": "How do you resolve \"too many connections\" errors when a Lambda function connects to an RDS database at maximum capacity?",
       "choices": [
         "Raise the Lambda function's provisioned concurrency setting to a higher value.",
         "Increase the value of the max_connect_errors parameter to 10 to allow more errors.",
