@@ -20,7 +20,8 @@
       "Bash(node -e ' *)",
       "PowerShell(Get-ChildItem \"C:\\\\Users\\\\Jimwel\\\\Desktop\\\\Projects\\\\Personal\\\\aws-cloud-ops\\\\src\" -Recurse | Where-Object {!$_.PSIsContainer} | Select-Object FullName | Sort-Object FullName)",
       "PowerShell(Get-ChildItem \"C:\\\\Users\\\\Jimwel\\\\Desktop\\\\Projects\\\\Personal\\\\aws-cloud-ops\\\\docs\" -Recurse | Where-Object {!$_.PSIsContainer} | Select-Object FullName)",
-      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\Jimwel\\\\Desktop\\\\Projects\\\\Personal\\\\aws-cloud-ops\\\\scripts\" -Recurse | Where-Object {!$_.PSIsContainer} | Select-Object FullName)"
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\Jimwel\\\\Desktop\\\\Projects\\\\Personal\\\\aws-cloud-ops\\\\scripts\" -Recurse | Where-Object {!$_.PSIsContainer} | Select-Object FullName)",
+      "Bash(node -e \"require\\('./docs/exams/cloud-ops-exam-2.json'\\); console.log\\('OK'\\)\")"
     ]
   }
 }

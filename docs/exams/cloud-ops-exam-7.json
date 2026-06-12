@@ -1,6 +1,136 @@
 {
   "id": "cloud-ops-exam-7",
   "title": "Practice Test - AWS Certified CloudOps Engineer Associate",
+  "services": [
+    {
+      "name": "Amazon Route 53",
+      "keywords": ["weighted routing (canary testing / traffic split)", "latency-based routing (minimize global response time)", "failover routing (active-passive)", "alias record for zone apex → ALB (no static IP needed)", "Resolver inbound endpoint (on-premises → AWS private hosted zone)", "Resolver outbound endpoint (AWS → on-premises DNS forwarding)"]
+    },
+    {
+      "name": "Amazon CloudFront",
+      "keywords": ["Origin Shield (consolidates cache misses, improves hit ratio)", "TTL-based caching to reduce origin requests", "invalidation API (force TTL expiry before it expires)", "versioned filenames as alternative to invalidation", "OAC/OAI restricts S3 website access to CloudFront only", "CloudFront + WAF + Shield for SQL injection and DDoS"]
+    },
+    {
+      "name": "AWS Secrets Manager",
+      "keywords": ["store and auto-rotate database credentials", "Lambda retrieves credentials at runtime (no hardcoding)", "use with SSM Parameter Store (SecureString) as alternative"]
+    },
+    {
+      "name": "Amazon FSx for Windows File Server",
+      "keywords": ["SMB protocol + Windows ACLs + Active Directory integration", "replaces EFS for Windows EC2 workloads with AD", "Multi-AZ for HA with automatic failover"]
+    },
+    {
+      "name": "AWS Compute Optimizer",
+      "keywords": ["EBS volume IOPS/throughput right-sizing recommendations", "EC2 instance type recommendations", "Lambda function memory/cost optimization recommendations"]
+    },
+    {
+      "name": "Amazon Athena",
+      "keywords": ["SQL on S3 (VPC flow logs, CloudTrail logs)", "serverless — no cluster needed", "analyze NAT gateway destinations using VPC flow logs"]
+    },
+    {
+      "name": "Amazon EBS",
+      "keywords": ["Fast Snapshot Restore (full IOPS immediately after restore from snapshot)", "gp3 upgrade from gp2 for consistent 3,000 IOPS without burst depletion", "EBS-specific CloudWatch metrics (VolumeReadOps, VolumeWriteOps — not DiskReadOps for EBS)"]
+    },
+    {
+      "name": "Amazon ElastiCache Redis",
+      "keywords": ["Multi-AZ + automatic failover for minimum RTO", "cluster mode enabled for horizontal sharding", "online resizing (vertical downsize with minimal downtime)"]
+    },
+    {
+      "name": "CloudWatch Logs Insights",
+      "keywords": ["count Lambda errors by type across multiple log groups", "stats command + count(errorType) + GROUP BY for classification", "queries up to 50 log groups per request"]
+    },
+    {
+      "name": "Amazon EKS",
+      "keywords": ["kubectl + AWS CLI (aws eks update-kubeconfig) for cluster API access", "Kubernetes HPA scales pods on CPU/memory (requires Metrics Server)", "HPA handles traffic surges by adding pod replicas"]
+    },
+    {
+      "name": "AWS IAM Cross-Account",
+      "keywords": ["Lambda in account A assumes role in account B to access DynamoDB", "trust policy on target account role allows source account Lambda", "cross-account role assumption for service-to-service access"]
+    },
+    {
+      "name": "AWS Systems Manager",
+      "keywords": ["CloudWatch Agent config via SSM Parameter Store + State Manager (multi-region deployment)", "Distributor + State Manager for MSI software deployment on tagged Windows EC2", "Run Command for immediate ad-hoc execution", "CloudWatch Agent config via SSM for consistent deployment across regions", "Session Manager failure: check IAM role + SSM Agent + VPC endpoint", "Patch Manager: separate patch baselines for staging vs production (patch groups)"]
+    },
+    {
+      "name": "Amazon DynamoDB",
+      "keywords": ["ConsumedReadCapacityUnits metric (proactive throttling alert)", "SCPs to block DynamoDB access org-wide including root users", "cross-account access via IAM role assumption"]
+    },
+    {
+      "name": "Amazon Route 53 Resolver DNS Firewall",
+      "keywords": ["blocks malicious DNS queries within VPC's DNS resolution path", "native interception before DNS resolves to malicious IPs"]
+    },
+    {
+      "name": "AWS CloudFormation",
+      "keywords": ["nested stacks (eliminate duplicate resource definitions, reuse common components)", "StackSets OUTDATED status (concurrent deployment conflict or account not opted in)", "CloudFormation to replicate dashboards across environments"]
+    },
+    {
+      "name": "Amazon S3",
+      "keywords": ["abort incomplete multipart uploads via S3 lifecycle rule (least overhead)", "Object Lock governance mode deletion requires s3:BypassGovernanceRetention permission + x-amz-bypass-governance-retention header", "SCPs to prevent bucket deletion across all accounts", "S3 access logs + CloudTrail for tracing unexpected LIST requests"]
+    },
+    {
+      "name": "Application Load Balancer (ALB)",
+      "keywords": ["sticky sessions (uneven load when one instance gets all stateful traffic)", "slow start mode (gradually increases new instance traffic)", "fix uneven distribution: enable cross-zone load balancing or remove stickiness"]
+    },
+    {
+      "name": "AWS Savings Plans",
+      "keywords": ["Compute Savings Plan covers Fargate (1 or 3-year commitment)", "All Upfront payment option provides maximum discount"]
+    },
+    {
+      "name": "AWS Billing Alerts",
+      "keywords": ["must enable billing alerts in Billing Preferences before creating CloudWatch alarms for estimated charges"]
+    },
+    {
+      "name": "Amazon CloudWatch Alarm + SSM Automation",
+      "keywords": ["CloudWatch alarm on process metric triggers SSM Automation runbook to restart process", "automated self-healing for application process failures"]
+    },
+    {
+      "name": "AWS Budgets",
+      "keywords": ["inter-region data transfer cost alerts", "email notifications when threshold approached"]
+    },
+    {
+      "name": "Amazon VPC",
+      "keywords": ["single NAT gateway: update private subnet route tables to point to new NAT gateway", "VPC flow logs custom format to add tcp-flags field (must delete + recreate)", "split tunneling on Client VPN (only VPC traffic through tunnel, rest goes direct)", "deploy internal EC2 instances in private subnets with no internet route"]
+    },
+    {
+      "name": "Amazon EFS",
+      "keywords": ["shared scalable file system across multiple EC2 AZs", "NFS-based, no Windows ACL support (use FSx for Windows for that)"]
+    },
+    {
+      "name": "AWS KMS",
+      "keywords": ["scheduled deletion: 7-30 day waiting period", "key state during deletion window: PendingDeletion (cannot encrypt/decrypt)", "cannot cancel deletion if key was deleted — but can cancel during waiting period"]
+    },
+    {
+      "name": "AWS Storage Gateway Tape Gateway",
+      "keywords": ["fix 'Not Enough Space': add upload buffer disk or archive tapes", "virtual tape library replacement for on-premises"]
+    },
+    {
+      "name": "AWS CloudTrail",
+      "keywords": ["identify who changed ASG minimum capacity (API call: UpdateAutoScalingGroup)", "trace S3 LIST requests (CloudTrail data events for S3)", "CloudTrail + S3 server access logs for full S3 request tracing"]
+    },
+    {
+      "name": "AWS Config",
+      "keywords": ["s3-bucket-public-read-prohibited managed rule + auto remediation", "release unassociated Elastic IPs via Config + Lambda remediation"]
+    },
+    {
+      "name": "EC2 Auto Scaling Warm Pool",
+      "keywords": ["pre-initialize instances to reduce scale-out latency from long boot scripts", "no increase to baseline capacity needed"]
+    },
+    {
+      "name": "AWS Organizations SCPs",
+      "keywords": ["block DynamoDB access across all accounts (including root users)", "prevent S3 bucket deletions across entire org"]
+    },
+    {
+      "name": "Amazon CloudWatch Metric Filters",
+      "keywords": ["create metric from log pattern (e.g., HTTP 503)", "alarm when filter match count exceeds threshold"]
+    },
+    {
+      "name": "Kubernetes HPA",
+      "keywords": ["scales pod count based on CPU/memory", "requires Metrics Server + configured kubectl", "handles traffic surges in EKS by adding pod replicas"]
+    },
+    {
+      "name": "AWS Client VPN",
+      "keywords": ["split tunneling: only VPC-destined traffic goes through tunnel", "reduces data transfer costs by keeping internet traffic local"]
+    }
+  ],
   "questions": [
     {
       "number": 1,

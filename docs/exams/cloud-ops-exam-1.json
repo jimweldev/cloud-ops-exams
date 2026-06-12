@@ -1,6 +1,124 @@
 {
   "id": "cloud-ops-exam-1",
   "title": "Practice Test - AWS Certified CloudOps Engineer Associate",
+  "services": [
+    {
+      "name": "Amazon RDS",
+      "keywords": ["Multi-AZ", "synchronous replication", "automatic failover", "read replicas", "Enhanced Monitoring", "DB parameter groups", "force_ssl", "DeletionPolicy snapshot"]
+    },
+    {
+      "name": "Amazon EC2",
+      "keywords": ["status checks", "StatusCheckFailed metric", "EBS-backed instance", "instance store", "AMI creation", "enhanced networking (SR-IOV)", "Dedicated Host", "termination protection", "DisableApiTermination"]
+    },
+    {
+      "name": "AWS CloudFormation",
+      "keywords": ["cfn-init", "cfn-signal", "Wait Condition", "DeletionPolicy=Snapshot", "OnFailure=DO_NOTHING", "stack policy", "StackSets", "resource import", "termination protection"]
+    },
+    {
+      "name": "Amazon CloudWatch",
+      "keywords": ["StatusCheckFailed metric", "EC2 alarms", "estimated charges alarm", "CloudWatch Logs", "metric filters", "enhanced monitoring for RDS"]
+    },
+    {
+      "name": "Amazon S3",
+      "keywords": ["Transfer Acceleration", "versioning & delete markers", "MFA-Delete (root + CLI only)", "Object Lock / WORM", "pre-signed URLs", "lifecycle policies", "default encryption (SSE-S3)", "server access logs", "cost allocation tags"]
+    },
+    {
+      "name": "Amazon S3 Glacier",
+      "keywords": ["Vault Lock Policy", "WORM compliance", "long-term archival", "lifecycle transition from S3"]
+    },
+    {
+      "name": "AWS CloudTrail",
+      "keywords": ["API call logging", "management events", "ELB API calls", "AWS Management Console actions"]
+    },
+    {
+      "name": "Amazon CloudFront",
+      "keywords": ["cache hit ratio", "Origin Shield", "TTL settings", "access logs + Athena analysis", "S3 website endpoint (HTTP only to origin)", "HTTPS viewer policy"]
+    },
+    {
+      "name": "AWS Budgets",
+      "keywords": ["cost budgets", "75% alert threshold", "inter-Region data transfer filter", "email notifications", "minimal operational effort"]
+    },
+    {
+      "name": "Amazon ElastiCache",
+      "keywords": ["Redis OSS", "cache evictions", "maxmemory / eviction policy", "larger node instance type", "in-memory caching"]
+    },
+    {
+      "name": "EC2 Auto Scaling",
+      "keywords": ["scheduled scaling", "predictive scaling", "target tracking policy", "instance protection", "scale-in termination"]
+    },
+    {
+      "name": "AWS IAM Identity Center",
+      "keywords": ["SAML 2.0 federation", "external IdP metadata + X.509 cert", "service provider SAML metadata", "SSO across accounts"]
+    },
+    {
+      "name": "AWS Snowball Edge",
+      "keywords": ["petabyte-scale data transfer", "80 TB usable HDD", "40 vCPUs on-device compute", "no direct Glacier copy (use S3 + lifecycle)"]
+    },
+    {
+      "name": "Amazon Cognito",
+      "keywords": ["user pools", "identity pools", "mobile app authentication", "assume IAM role for S3 access"]
+    },
+    {
+      "name": "Amazon EventBridge",
+      "keywords": ["event-driven rules", "EC2 instance launch events", "SNS topic target", "minimal maintenance"]
+    },
+    {
+      "name": "AWS KMS",
+      "keywords": ["cross-account key sharing", "key policy in owning account", "IAM policy in external account", "customer managed keys"]
+    },
+    {
+      "name": "AWS Storage Gateway",
+      "keywords": ["File Gateway (NFS/SMB + S3 + local cache)", "Volume Gateway", "SSL/TLS in transit", "SSE-S3 at rest by default"]
+    },
+    {
+      "name": "Amazon VPC",
+      "keywords": ["VPC Flow Logs (immutable after creation)", "Network ACLs (stateless)", "Security Groups (stateful)", "NACL inbound + outbound rules required"]
+    },
+    {
+      "name": "Amazon EBS",
+      "keywords": ["DeletionPolicy=Snapshot", "device name conflict (attaching state)", "non-root volume persists by default", "snapshots capture written data only"]
+    },
+    {
+      "name": "AWS Config",
+      "keywords": ["compliance rules", "resource configuration tracking", "detect unencrypted RDS connections"]
+    },
+    {
+      "name": "AWS Backup",
+      "keywords": ["centralized backup management", "cross-account cross-Region", "backup plans", "tag-based resource assignment", "AWS Organizations integration"]
+    },
+    {
+      "name": "Amazon Athena",
+      "keywords": ["SQL queries on S3", "CloudFront log analysis", "S3 access log analysis", "serverless interactive queries"]
+    },
+    {
+      "name": "AWS X-Ray",
+      "keywords": ["application tracing", "service map", "ALB adds trace ID header but does NOT send data to X-Ray", "Lambda and API Gateway integrated"]
+    },
+    {
+      "name": "Application Load Balancer (ALB)",
+      "keywords": ["listeners (required before use)", "target groups attached to listener rules", "security group / NACL must allow client traffic", "X-Amzn-Trace-Id header"]
+    },
+    {
+      "name": "AWS CloudFormation StackSets",
+      "keywords": ["deploy across multiple accounts & Regions", "service-managed permissions with Organizations", "automate IAM role creation at scale"]
+    },
+    {
+      "name": "AWS Cost Explorer",
+      "keywords": ["cost allocation tags", "per-bucket S3 cost reports", "filter by tag", "cost & usage analysis"]
+    },
+    {
+      "name": "AWS Organizations",
+      "keywords": ["multi-account management", "StackSets integration", "AWS Backup central policies", "IAM Identity Center federation"]
+    },
+    {
+      "name": "AWS Control Tower",
+      "keywords": ["multi-account environment setup", "IAM Identity Center prerequisite", "guardrails", "landing zone"]
+    },
+    {
+      "name": "Amazon EFS",
+      "keywords": ["shared NFS file system", "higher cost vs S3", "use CloudFront + S3 instead for static large files"]
+    }
+  ],
   "questions": [
     {
       "number": 1,

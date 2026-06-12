@@ -1,6 +1,144 @@
 {
   "id": "cloud-ops-exam-2",
   "title": "Practice Test - AWS Certified CloudOps Engineer Associate",
+  "services": [
+    {
+      "name": "Application Load Balancer (ALB)",
+      "keywords": ["access logging to S3 (same region)", "WebSockets", "host/path-based routing", "container support", "User-Agent device-type headers", "ephemeral port return traffic"]
+    },
+    {
+      "name": "Amazon S3",
+      "keywords": ["ALB access logs (standard bucket, same region)", "S3 Standard-IA lifecycle (30-day transition)", "Cross-Region Replication", "S3 Inventory (replication + encryption status)", "MFA Delete (root + CLI)", "bucket policies & ACLs", "delete markers block bucket deletion"]
+    },
+    {
+      "name": "AWS Trusted Advisor",
+      "keywords": ["cost / performance / security best-practice guidance", "service quota checks", "EventBridge integration for limit alerts"]
+    },
+    {
+      "name": "AWS Config",
+      "keywords": ["restricted-ssh managed rule", "require-tags rule (tag compliance)", "SSM Automation remediation", "continuous security group monitoring"]
+    },
+    {
+      "name": "AWS Systems Manager",
+      "keywords": ["SSM Automation documents (remediation actions)", "Parameter Store (latest AMI IDs in CloudFormation)", "Run Command (remote shell scripts)", "Patch Manager (fleet OS patching)", "State Manager"]
+    },
+    {
+      "name": "Amazon EFS",
+      "keywords": ["shared NFS across multi-AZ EC2", "file/directory-level permissions", "PercentIOLimit metric", "Max I/O performance mode (must create new FS + DataSync)", "cannot change performance mode in-place"]
+    },
+    {
+      "name": "Amazon EBS",
+      "keywords": ["RAID 0 for max I/O performance", "default encryption per region (EC2 Console)", "AutoEnableIO", "RAID 5/6 not recommended (parity overhead)"]
+    },
+    {
+      "name": "AWS Certificate Manager (ACM)",
+      "keywords": ["managed auto-renewal (Amazon-issued certs only)", "imported 3rd-party certs NOT auto-renewed", "associate with ELB, no extra config needed"]
+    },
+    {
+      "name": "Amazon Route 53",
+      "keywords": ["health checks: endpoint + CloudWatch alarm types", "weighted routing (traffic split / canary deployments)", "geoproximity routing (nearest region)", "latency routing (lowest latency)", "failover routing (active-passive)"]
+    },
+    {
+      "name": "Amazon FSx for Windows File Server",
+      "keywords": ["Multi-AZ with synchronous replication + auto-failover", "SMB protocol", "Windows ACLs", "RDS does NOT support Oracle RAC (use EC2 instead)"]
+    },
+    {
+      "name": "Amazon CloudFront",
+      "keywords": ["cache hit ratio: max-age directive + targeted query string forwarding", "CDN for global S3 static sites", "User-Agent origin header for device detection", "CloudWatch RUM integration", "signed URLs for secure content"]
+    },
+    {
+      "name": "AWS Organizations",
+      "keywords": ["RI discount sharing (management account controls)", "consolidated billing", "only management account can disable RI sharing"]
+    },
+    {
+      "name": "NAT Gateway",
+      "keywords": ["must be in public subnet", "outbound internet for private instances", "managed + auto-scaling", "does NOT support IPv6"]
+    },
+    {
+      "name": "Egress-Only Internet Gateway",
+      "keywords": ["IPv6 outbound-only traffic", "prevents inbound IPv6 connections", "required for IPv6 private subnet internet access"]
+    },
+    {
+      "name": "Amazon CloudWatch",
+      "keywords": ["detailed monitoring (1-minute intervals)", "basic monitoring (5-minute intervals)", "dashboards for multi-resource views", "procstat plugin (per-process CPU metrics)", "StatusCheckFailed_System (triggers EC2 auto-recovery)"]
+    },
+    {
+      "name": "AWS CloudTrail",
+      "keywords": ["API call logging (KMS, EC2 key pairs, etc.)", "multi-account logging to central S3 bucket", "key creation / deletion / rotation events"]
+    },
+    {
+      "name": "AWS KMS",
+      "keywords": ["imported key material (manual rotation only)", "create new key + update alias for rotation", "cannot replace existing key material", "auto-rotation ~365 days (AWS managed keys only)"]
+    },
+    {
+      "name": "IAM Access Analyzer",
+      "keywords": ["preview resource permission changes", "external access findings", "cross-account & public access reports", "logic-based policy analysis"]
+    },
+    {
+      "name": "AWS CloudFormation",
+      "keywords": ["nested stacks (reusable templates within same region)", "CreationPolicy + cfn-signal (wait for app readiness)", "UpdatePolicy + WaitOnResourceSignals (rolling updates)", "drift detection (actual vs expected config)", "StackSets (multi-account/region deployment)"]
+    },
+    {
+      "name": "Amazon SQS",
+      "keywords": ["FIFO queue (strict ordering + rate control)", "Standard queue (no ordering guarantee)", "Auto Scaling based on ApproximateNumberOfMessagesVisible"]
+    },
+    {
+      "name": "Amazon SNS",
+      "keywords": ["email subscriptions", "CloudWatch alarm notifications", "EC2 auto-recovery notifications", "cannot directly send email without subscription"]
+    },
+    {
+      "name": "Amazon EventBridge",
+      "keywords": ["daily Lambda triggers (AMI creation)", "Trusted Advisor service quota metric rules", "EC2 event-driven automation"]
+    },
+    {
+      "name": "AWS Backup",
+      "keywords": ["centralized backup plans", "Volume Gateway (iSCSI) integration", "no reboot parameter support (file system consistency not guaranteed)"]
+    },
+    {
+      "name": "Amazon VPC Flow Logs",
+      "keywords": ["capture accepted/rejected IP traffic", "diagnose security group / NACL issues", "REJECT = SG or NACL blocking traffic"]
+    },
+    {
+      "name": "AWS Direct Connect",
+      "keywords": ["dedicated private connection to AWS", "consistent network experience", "not Internet-based"]
+    },
+    {
+      "name": "Virtual Private Gateway (VGW)",
+      "keywords": ["enables Site-to-Site VPN", "VPC route table must have VGW route to on-premises CIDR", "required for hybrid cloud connectivity"]
+    },
+    {
+      "name": "EC2 Placement Groups",
+      "keywords": ["cluster placement (low-latency, high bandwidth between instances)", "up to 10 Gbps per-flow TCP", "best for tightly coupled workloads"]
+    },
+    {
+      "name": "Amazon ElastiCache",
+      "keywords": ["Redis Multi-AZ (automatic failover)", "Memcached (no Multi-AZ)", "Auto Discovery for Memcached cluster connections"]
+    },
+    {
+      "name": "AWS Storage Gateway",
+      "keywords": ["Volume Gateway (iSCSI for on-premises)", "File Gateway (NFS/SMB + S3)", "integrates with AWS Backup"]
+    },
+    {
+      "name": "AWS DataSync",
+      "keywords": ["data migration between storage services", "EFS to EFS migration", "on-premises to AWS transfer"]
+    },
+    {
+      "name": "EC2 Auto Scaling",
+      "keywords": ["scale on SQS queue depth", "Spot Fleet lowestPrice + InstancePoolsToUseCount (cost-optimized diversified)", "UpdatePolicy rolling updates via WaitOnResourceSignals"]
+    },
+    {
+      "name": "Amazon S3 Glacier",
+      "keywords": ["Vault Lock (WORM, immutable once locked)", "vault access policy (mutable, not compliance-grade)", "Data Retrieval Policy (controls retrieval limits)"]
+    },
+    {
+      "name": "S3 Inventory",
+      "keywords": ["CSV/ORC/Parquet reports on object metadata", "replication status per object", "encryption status per object", "daily or weekly schedule"]
+    },
+    {
+      "name": "AWS IAM",
+      "keywords": ["iam:PassRole + iam:GetRole (pass approved roles to EC2)", "trust policy (allows service to assume role)", "SCPs (Organizations guardrails, not for passing roles)", "instance profile (links IAM role to EC2)"]
+    }
+  ],
   "questions": [
     {
       "number": 1,

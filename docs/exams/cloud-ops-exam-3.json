@@ -1,6 +1,120 @@
 {
   "id": "cloud-ops-exam-3",
   "title": "Practice Test - AWS Certified CloudOps Engineer Associate",
+  "services": [
+    {
+      "name": "EC2 Auto Scaling",
+      "keywords": ["multi-AZ across 3 AZs for high availability", "AZRebalance suspended when Terminate process is suspended", "suspend Terminate to inspect unhealthy instances", "terminate-instance without decreasing desired capacity"]
+    },
+    {
+      "name": "Application Load Balancer (ALB)",
+      "keywords": ["ELB access logs (client IP, latency, path, response)", "ALB does not produce its own monitoring/activity logs", "integrate with AWS WAF for XSS/SQL injection"]
+    },
+    {
+      "name": "Amazon VPC",
+      "keywords": ["Security groups (stateful, allow-only)", "NACLs (stateless, allow + deny, /32 for single IP block)", "ICMP needs SG inbound + NACL outbound allow", "VPC peering full mesh (no overlapping CIDRs)", "IPv6 needs IGW + route table (not NAT)", "route table IGW destination must be 0.0.0.0/0", "internet access: IGW + public IP + route table"]
+    },
+    {
+      "name": "Amazon S3",
+      "keywords": ["SSE-S3 (AWS managed keys) and SSE-C (customer-provided keys)", "versioning 503 throttle when millions of versions exist", "s3:GetObject needs /* in Resource ARN", "bucket policy resource mismatch → 'Action does not apply' error", "CORS required for cross-origin resource loading", "S3 VPC endpoint restricts access to specific VPC", "createdBy tag + Cost Explorer for per-developer costs"]
+    },
+    {
+      "name": "AWS Budgets",
+      "keywords": ["alert when monthly spending exceeds threshold", "cannot directly terminate instances", "budget actions for cost control"]
+    },
+    {
+      "name": "AWS Elastic Beanstalk",
+      "keywords": ["instance profile must exist before environment creation", "CLI fails if IAM role has no permission to create roles", "insufficient instance profile permissions also causes error"]
+    },
+    {
+      "name": "Amazon Aurora",
+      "keywords": ["backtracking (rewind in-place, same cluster, minutes, no new instance)", "point-in-time recovery (creates new cluster)", "backtracking requires backtrack feature to be enabled at creation"]
+    },
+    {
+      "name": "AWS CloudFormation",
+      "keywords": ["stack policy (deny Update:* on specific resources)", "cfn-signal must be in user data", "Wait Condition pauses CloudFormation until signal received", "DeletionPolicy=Snapshot", "DependsOn for VPC-gateway attachment ordering", "cfn-init (installs packages/files/services from metadata)", "cfn-signal (signals success/failure to stack)"]
+    },
+    {
+      "name": "Amazon Route 53 Resolver",
+      "keywords": ["inbound endpoint (on-premises → AWS DNS resolution)", "outbound endpoint (AWS → on-premises DNS)", "configure on-premises DNS to forward aws-cloud private queries to inbound endpoint"]
+    },
+    {
+      "name": "Amazon RDS",
+      "keywords": ["separate SGs for servers and DB (allow only from EC2 SG)", "encryption must be enabled at creation (snapshot copy to encrypt existing)", "Multi-AZ eliminates I/O suspension for automated snapshots (manual snapshots still suspend)", "RDS Events + SNS for email/mobile notifications"]
+    },
+    {
+      "name": "Amazon CloudWatch",
+      "keywords": ["CloudWatch Agent required for memory/swap metrics", "no built-in EC2 memory metric", "custom metrics via CLI (put-metric-data)", "detailed monitoring for 1-min granularity", "basic monitoring is 5-min default"]
+    },
+    {
+      "name": "EC2 Placement Groups",
+      "keywords": ["spread placement group (distinct racks, max 7 per AZ)", "cluster placement group (low-latency inter-instance, single AZ)", "partition placement group (large distributed workloads)"]
+    },
+    {
+      "name": "Amazon S3 Glacier",
+      "keywords": ["archives have opaque IDs (no custom filenames)", "use S3 + lifecycle or DataSync → S3 → lifecycle to preserve filenames"]
+    },
+    {
+      "name": "AWS DataSync",
+      "keywords": ["transfer files to S3 preserving filenames", "use with S3 lifecycle policy to move to Glacier"]
+    },
+    {
+      "name": "AWS Systems Manager",
+      "keywords": ["Patch Manager (OS security patches fleet-wide)", "Run Command (AWS-RunShellScript/PowerShellScript, target by tag)", "command history as execution evidence"]
+    },
+    {
+      "name": "Amazon ElastiCache",
+      "keywords": ["Memcached eviction → add more nodes (horizontal scale-out)", "Memcached vertical scale: create new cluster (CreateCacheCluster + CacheNodeType)", "Redis: can change node type directly (online resizing)", "no Multi-AZ on Memcached"]
+    },
+    {
+      "name": "AWS Cost Explorer",
+      "keywords": ["createdBy AWS-generated tag for per-IAM-user cost", "must be activated in Billing console first"]
+    },
+    {
+      "name": "VPC Peering",
+      "keywords": ["full mesh required for all-to-all communication", "no overlapping IPv4 CIDRs", "no transitive peering or edge-to-edge routing", "route table entries needed on both sides"]
+    },
+    {
+      "name": "Amazon SNS",
+      "keywords": ["RDS event notifications (email + mobile phone)", "EventBridge target for API call alerts"]
+    },
+    {
+      "name": "Amazon SQS",
+      "keywords": ["decouple S3 event-driven workloads for async processing", "scale ASG on queue depth"]
+    },
+    {
+      "name": "AWS Organizations SCPs",
+      "keywords": ["enforce uniform service/action restrictions across all accounts including root users"]
+    },
+    {
+      "name": "Amazon CloudFront",
+      "keywords": ["CloudFront Access Logs + Athena for analytics", "detect unauthorized content changes", "static + dynamic content delivery"]
+    },
+    {
+      "name": "IAM Credential Report",
+      "keywords": ["shows MFA status and access key age for all users", "generated in IAM console"]
+    },
+    {
+      "name": "RDS Enhanced Monitoring",
+      "keywords": ["per-process CPU and memory on RDS OS in real time"]
+    },
+    {
+      "name": "AWS Storage Gateway",
+      "keywords": ["Stored Volume mode (primary data on-premises, async backup to S3)", "File Gateway (NFS/SMB + local cache)"]
+    },
+    {
+      "name": "Amazon Route 53",
+      "keywords": ["private hosted zone for VPC-only DNS names", "geoproximity routing (bias value)", "failover routing (active-passive)"]
+    },
+    {
+      "name": "EC2 Reserved Instances",
+      "keywords": ["Convertible RIs allow instance type changes during term", "cost savings for >1 year continuous workloads"]
+    },
+    {
+      "name": "Amazon VPC Traffic Mirroring",
+      "keywords": ["set target MTU to avoid packet truncation"]
+    }
+  ],
   "questions": [
     {
       "number": 1,

@@ -1,6 +1,120 @@
 {
   "id": "cloud-ops-exam-5",
   "title": "Practice Test - AWS Certified CloudOps Engineer Associate",
+  "services": [
+    {
+      "name": "Amazon EC2 / Reserved Instances",
+      "keywords": ["Reserved Instances for >1 year continuous workloads", "delete idle EBS volumes to reduce costs", "Elastic IPs only billed when unattached or excess", "burstable instances Unlimited mode for sustained CPU bursting", "EC2 Image Builder (pre-baked AMI to reduce ASG launch time)"]
+    },
+    {
+      "name": "Amazon EBS",
+      "keywords": ["idle EBS volumes still billed (delete or snapshot first)", "RAID 1 for data redundancy (mirrors data)", "RAID 0 for performance only (no redundancy)", "encrypted snapshots for security + compliance", "EBS Fast Snapshot Restore (full performance immediately after restore)", "enable EBS-optimized instance for I/O bandwidth issues", "RAID 1 + PIOPS for high-throughput with redundancy"]
+    },
+    {
+      "name": "Amazon SNS",
+      "keywords": ["CloudWatch alarm notification delivery", "email/SMS to teams when alarm fires", "combined with CloudWatch alarm for auto-reboot thresholds"]
+    },
+    {
+      "name": "Amazon RDS",
+      "keywords": ["Multi-AZ for high availability (primary goal)", "read replicas for read-heavy offload", "DependsOn in CloudFormation to sequence EC2 after RDS", "backup retention period cannot be set to 0 when Multi-AZ is enabled"]
+    },
+    {
+      "name": "Amazon DLM (Data Lifecycle Manager)",
+      "keywords": ["automate EBS snapshot creation + retention", "7-day retention policy replaces manual Lambda scripts", "no default retention period (must configure)", "DLM is free to use"]
+    },
+    {
+      "name": "Amazon CloudWatch",
+      "keywords": ["put-metric-data CLI command to publish custom metrics", "detailed monitoring (1-min) required for 3-min reboot alarm", "basic monitoring is 5-min (insufficient for 3-min alarm)", "CloudWatch Logs Insights (stats + count for error classification)", "CloudWatch alarm action: reboot instance on CPU 100%", "CloudWatch Agent + IAM role required to stream EC2 logs"]
+    },
+    {
+      "name": "Amazon VPC",
+      "keywords": ["NAT gateway + NAT instance (IPv4 outbound-only)", "egress-only IGW (IPv6 outbound-only)", "Internet Gateway + route table for public subnet internet access", "subnet CIDR /26 = 59 usable IPs (enough for 30 EC2)", "AWS reserves 5 IPs per subnet"]
+    },
+    {
+      "name": "Amazon Aurora",
+      "keywords": ["Aurora Replicas (up to 15, multi-AZ, fast failover)", "AuroraReplicaLag metric spikes cause read stale data / session issues", "Aurora read replicas provide both scalability and availability"]
+    },
+    {
+      "name": "EC2 Auto Scaling",
+      "keywords": ["scale-in protection via SetInstanceProtection API", "enable at job start, disable at end", "Lifecycle hook Terminating:Wait delays termination", "OldestInstance / OldestLaunchConfiguration termination policies", "warm pool (pre-initialized instances for long boot times)", "ASG deploys to same AZ if another AZ has insufficient capacity"]
+    },
+    {
+      "name": "Amazon CloudWatch Agent",
+      "keywords": ["install agent + attach IAM role with CloudWatch permissions", "streams NGINX/application logs to CloudWatch", "CloudTrail role insufficient (wrong permissions)"]
+    },
+    {
+      "name": "AWS IAM",
+      "keywords": ["MFA for privileged users", "least privilege access", "never use root access keys for applications", "use IAM roles (not access keys) for EC2 applications", "IAM roles + STS for corporate SSO (enterprise identity federation)", "IAM policy Condition with date range + VPC restricts access jointly (AND logic)"]
+    },
+    {
+      "name": "Amazon Cognito",
+      "keywords": ["ADFS as external SAML IdP for OpenSearch Kibana authentication", "user pool + Cognito authentication on OpenSearch"]
+    },
+    {
+      "name": "Amazon EventBridge",
+      "keywords": ["trigger Lambda on EBS snapshot completion (cross-region copy)", "EBS emits snapshot state-change events to EventBridge"]
+    },
+    {
+      "name": "Amazon Route 53",
+      "keywords": ["Alias record for zone apex (katipunanagency.com) to ALB", "CNAME cannot be used at zone apex", "failover routing for active-passive hybrid setup", "Alias record routes zone apex to ALB (also exam 5 q60)"]
+    },
+    {
+      "name": "CloudWatch Logs Insights",
+      "keywords": ["stats command + count() function for error type classification", "queries up to 50 log groups in one request", "faster than metric filters for ad-hoc analysis"]
+    },
+    {
+      "name": "AWS CloudFormation StackSets",
+      "keywords": ["update stacks across multiple accounts simultaneously", "Change Sets only preview changes on a single stack", "drift detection shows actual vs expected config"]
+    },
+    {
+      "name": "Amazon EKS",
+      "keywords": ["Kubernetes Metrics Server required before HPA", "kubectl must be configured to communicate with cluster", "Horizontal Pod Autoscaler (HPA) scales pods on CPU", "Vertical Pod Autoscaler (VPA) resizes individual pod resources"]
+    },
+    {
+      "name": "EC2 Image Builder",
+      "keywords": ["create pre-baked AMI with dependencies installed", "reduces ASG instance launch time (no user data script needed)", "not a performance optimizer for existing instances"]
+    },
+    {
+      "name": "Amazon Athena",
+      "keywords": ["SQL queries on CloudTrail logs stored in S3", "serverless — no cluster needed (unlike Redshift Spectrum)", "QuickSight is for visualization not querying"]
+    },
+    {
+      "name": "Amazon OpenSearch Service",
+      "keywords": ["Kibana authentication via Cognito + external ADFS IdP", "master + data nodes across AZs for HA"]
+    },
+    {
+      "name": "AWS CloudTrail",
+      "keywords": ["audit all CloudFormation API calls", "log file validation (detect tampering after delivery)", "records all API activity including cfn operations"]
+    },
+    {
+      "name": "AWS CloudFormation",
+      "keywords": ["cfn-init (install packages/configure from metadata)", "cfn-signal (signal success/failure)", "DependsOn (EC2 waits for RDS to complete)", "Mappings section (region-specific AMI IDs etc.)", "Change Sets (preview before applying)", "StackSets (multi-account updates)"]
+    },
+    {
+      "name": "Amazon S3",
+      "keywords": ["SSE-KMS default encryption for compliance", "MFA-authenticated IAM users via bucket policy Condition", "S3 Object Lock Compliance mode for WORM", "versioning to prevent permanent accidental deletion", "CloudFront invalidation + versioned filenames to purge cache", "CloudFront signed URLs to restrict access"]
+    },
+    {
+      "name": "AWS Lambda",
+      "keywords": ["cost-effective for short infrequent batch jobs (pay per invocation)", "reserved concurrency = 100 guarantees minimum concurrent executions", "15-minute max timeout"]
+    },
+    {
+      "name": "AWS CloudHSM",
+      "keywords": ["FIPS 140-2 validated hardware", "customer-exclusive control (AWS cannot access keys)", "differs from KMS (AWS manages KMS HSMs)"]
+    },
+    {
+      "name": "AWS Elastic Beanstalk",
+      "keywords": ["All at Once deployment (fastest, brief downtime)", "Rolling, Rolling with additional batch, Blue/Green options"]
+    },
+    {
+      "name": "AWS Security Hub + AWS Control Tower",
+      "keywords": ["CIS AWS Foundations Benchmark across all org accounts", "Security Hub must be enabled in each account + delegated admin"]
+    },
+    {
+      "name": "AWS Cost Explorer RI Reports",
+      "keywords": ["Reserved Instance utilization and coverage reports", "identify underused or missing RI coverage"]
+    }
+  ],
   "questions": [
     {
       "number": 1,

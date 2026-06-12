@@ -1,6 +1,132 @@
 {
   "id": "cloud-ops-exam-4",
   "title": "Practice Test - AWS Certified CloudOps Engineer Associate",
+  "services": [
+    {
+      "name": "AWS Systems Manager",
+      "keywords": ["Automation (custom + pre-defined runbooks)", "EventBridge notifications for automation tasks", "concurrent automation limit: 25; max duration: 12 hrs", "SSM Agent required on managed instances", "CloudWatch Agent deployment via SSM for disk space monitoring"]
+    },
+    {
+      "name": "Amazon CloudFront",
+      "keywords": ["CDN for global performance improvement", "Popular Objects Report (frequently accessed objects)", "Usage Reports (HTTP/HTTPS request count by region)", "Cache Statistics Report (status code breakdown)", "Top Referrers Report (domains originating requests)", "CloudFront + WAF for XSS/SQL injection protection"]
+    },
+    {
+      "name": "Amazon RDS",
+      "keywords": ["managed relational database (patching, backups, Multi-AZ)", "read replicas for scalability", "Multi-AZ for high availability and failover", "RDS Proxy (connection pooling, preserve connections on failover)"]
+    },
+    {
+      "name": "Amazon CloudWatch",
+      "keywords": ["CloudWatch Agent for memory/swap metrics", "DiskReadOps always 0 on EBS-backed instance with no instance store", "detailed monitoring (1-min intervals)", "CloudWatch cross-region dashboard aggregation", "alarm on ALB UnHealthyHostCount for all-instance unhealthy state", "custom metrics via put-metric-data", "disk space monitoring via CloudWatch Agent + SSM"]
+    },
+    {
+      "name": "EC2 Tags",
+      "keywords": ["filter instances for automation (start/stop scripts)", "opt-in/opt-out of automated tasks"]
+    },
+    {
+      "name": "AWS Organizations",
+      "keywords": ["centralized policy management + consolidated billing", "invite existing accounts via management account console", "SCPs for guardrails across OUs", "write organization S3 bucket policy with aws:PrincipalOrgID condition"]
+    },
+    {
+      "name": "Network Load Balancer (NLB)",
+      "keywords": ["Layer 4 TCP/UDP", "millions of requests/second with ultra-low latency", "volatile traffic patterns", "does not support host/path-based routing or AWS WAF"]
+    },
+    {
+      "name": "Amazon Route 53",
+      "keywords": ["A records for non-AWS resources (on-premises servers)", "HTTP health checks for failover", "alias records for AWS resources only (not on-premises)", "weighted routing (canary / traffic split)", "failover routing with ALB health check", "create subdomain delegation without migrating parent domain"]
+    },
+    {
+      "name": "Amazon Inspector",
+      "keywords": ["EC2 instance behavior analysis", "network/file system/process activity monitoring", "identifies potential security issues and vulnerabilities"]
+    },
+    {
+      "name": "Amazon EBS",
+      "keywords": ["EBS-optimized instance (dedicated EBS bandwidth)", "Provisioned IOPS SSD io2 (>100,000 IOPS for random I/O)", "DiskReadOps = 0 when no instance store volumes present"]
+    },
+    {
+      "name": "AWS Shield Advanced",
+      "keywords": ["DDoS protection (SYN/UDP floods, volumetric attacks)", "24x7 DDoS Response Team", "Layer 3/4 protection for EC2, ELB, CloudFront, Route 53"]
+    },
+    {
+      "name": "AWS CloudFormation",
+      "keywords": ["default OnFailure = ROLLBACK (not DELETE)", "DependsOn for VPC-gateway attachment ordering", "UPDATE_ROLLBACK_FAILED: use ContinueUpdateRollback API", "nested stacks for reusable shared components (same region)", "StackSets for multi-account/region deployment", "Resources section is the only required section in a template"]
+    },
+    {
+      "name": "AWS CloudTrail",
+      "keywords": ["API call logging for compliance", "federated user (AssumeRoleWithWebIdentity) audit trail", "userIdentity section maps calls to federated callers"]
+    },
+    {
+      "name": "AWS Health Dashboard",
+      "keywords": ["AWS outages and infrastructure change notifications", "personalized account-level health events", "use EventBridge + Lambda + Slack for Slack notifications"]
+    },
+    {
+      "name": "AWS Artifact",
+      "keywords": ["on-demand PCI DSS, SOC, ISO compliance reports", "Attestation of Compliance (AOC)"]
+    },
+    {
+      "name": "Amazon Aurora",
+      "keywords": ["RDS Proxy for Lambda connection pooling", "Proxy reduces failover time and preserves connections", "Aurora read replicas for availability"]
+    },
+    {
+      "name": "Amazon Cognito",
+      "keywords": ["social media sign-in (OAuth)", "user pools + identity pools", "IAM role assignment for authenticated users"]
+    },
+    {
+      "name": "Amazon RDS Proxy",
+      "keywords": ["connection pooling for Lambda → RDS", "preserves application connections during failover", "reduces 'too many connections' errors"]
+    },
+    {
+      "name": "AWS Storage Gateway Volume Gateway",
+      "keywords": ["CacheHitPercent low + CachePercentUsed high → add larger cached disk", "create new disk in host, edit local disk in console", "do NOT resize existing cache disk"]
+    },
+    {
+      "name": "AWS WAF",
+      "keywords": ["IP sets + web ACL to block specific IPs", "integrates with ALB and CloudFront (not NLB)", "blocks SQL injection, XSS, brute-force HTTP floods"]
+    },
+    {
+      "name": "AWS Config",
+      "keywords": ["s3-bucket-logging-enabled managed rule", "auto remediation actions", "require-tags rule for tag compliance", "security group rules compliance across accounts (Firewall Manager + Config)"]
+    },
+    {
+      "name": "AWS Cost and Usage Report",
+      "keywords": ["CSV billing reports for spreadsheet analysis", "daily/monthly granularity", "delivered to S3 bucket"]
+    },
+    {
+      "name": "AWS Secrets Manager",
+      "keywords": ["store + auto-rotate RDS credentials", "Lambda retrieves credentials at runtime", "RotationSchedule resource in CloudFormation"]
+    },
+    {
+      "name": "AWS Certificate Manager (ACM)",
+      "keywords": ["SSL/TLS certificates for HTTPS", "auto-renews Amazon-issued certs", "imported 3rd-party certs NOT auto-renewed"]
+    },
+    {
+      "name": "AWS Firewall Manager",
+      "keywords": ["enforce security group compliance across multiple accounts", "requires AWS Organizations + Security Hub"]
+    },
+    {
+      "name": "IAM Identity Center",
+      "keywords": ["permission sets to grant account access", "SSO for all assigned accounts and applications"]
+    },
+    {
+      "name": "EC2 Auto Scaling",
+      "keywords": ["scheduled scaling for predictable daily peaks", "warm pool for pre-initialized instances", "target tracking on ALBRequestCountPerTarget", "scale-in protection (SetInstanceProtection API)"]
+    },
+    {
+      "name": "Amazon VPC",
+      "keywords": ["private subnet route table: S3 VPC endpoint + NAT gateway as separate routes", "route table blackhole = NAT instance stopped/terminated", "NAT gateway must be in public subnet", "internet access: IGW + route + public IP"]
+    },
+    {
+      "name": "Amazon S3",
+      "keywords": ["S3 Transfer Acceleration for geographically distant uploads", "S3 + CloudFront for static asset offloading", "S3 lifecycle + Glacier for long-term archival", "bucket policy with aws:PrincipalOrgID for org-wide access"]
+    },
+    {
+      "name": "Amazon Route 53 Private Hosted Zone",
+      "keywords": ["custom internal domain names for VPC resources"]
+    },
+    {
+      "name": "AWS Compute Optimizer",
+      "keywords": ["EC2 right-sizing recommendations (instance type)", "EBS volume IOPS/throughput recommendations"]
+    }
+  ],
   "questions": [
     {
       "number": 1,

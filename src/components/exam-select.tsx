@@ -7,18 +7,20 @@ import {
   CardFooter,
 } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { BookOpen, Play } from "lucide-react"
+import { BookOpen, Play, Layers } from "lucide-react"
 
 interface ExamSelectProps {
   exams: ExamData[]
   onStartExam: (examId: string) => void
   onReviewExam: (examId: string) => void
+  onViewServices: (examId: string) => void
 }
 
 export function ExamSelect({
   exams,
   onStartExam,
   onReviewExam,
+  onViewServices,
 }: ExamSelectProps) {
   return (
     <div className="mx-auto w-full max-w-3xl space-y-8">
@@ -53,6 +55,16 @@ export function ExamSelect({
                 <BookOpen data-icon="inline-start" />
                 Review
               </Button>
+              {exam.services && exam.services.length > 0 && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => onViewServices(exam.id)}
+                >
+                  <Layers data-icon="inline-start" />
+                  Services
+                </Button>
+              )}
               <Button size="sm" onClick={() => onStartExam(exam.id)}>
                 <Play data-icon="inline-start" />
                 Start Exam

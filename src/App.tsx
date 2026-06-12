@@ -1,48 +1,79 @@
-import { useState, useMemo } from "react"
+import { useMemo } from "react"
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Outlet,
+  useNavigate,
+  useParams,
+} from "react-router"
 import { loadExams } from "@/lib/exam-data"
 import { ExamSelect } from "@/components/exam-select"
 import { ExamReview } from "@/components/exam-review"
 import { ExamSession } from "@/components/exam-session"
-import type { ExamData } from "@/types/exam"
+import { ExamServices } from "@/components/exam-services"
 
-type View =
-  | { type: "select" }
-  | { type: "review"; examId: string }
-  | { type: "exam"; examId: string }
-
-export function App() {
-  const exams: ExamData[] = useMemo(() => loadExams(), [])
-  const [view, setView] = useState<View>({ type: "select" })
-
-  const currentExam =
-    view.type !== "select"
-      ? exams.find((e) => e.id === view.examId)
-      : undefined
-
+function Layout() {
   return (
     <div className="min-h-svh p-4 sm:p-6 md:p-8">
-      {view.type === "select" && (
-        <ExamSelect
-          exams={exams}
-          onStartExam={(id) => setView({ type: "exam", examId: id })}
-          onReviewExam={(id) => setView({ type: "review", examId: id })}
-        />
-      )}
-      {view.type === "review" && currentExam && (
-        <ExamReview
-          exam={currentExam}
-          onBack={() => setView({ type: "select" })}
-        />
-      )}
-      {view.type === "exam" && currentExam && (
-        <ExamSession
-          key={currentExam.id}
-          exam={currentExam}
-          onBack={() => setView({ type: "select" })}
-        />
-      )}
+      <Outlet />
     </div>
   )
+}
+
+function ExamSelectPage() {
+  const exams = useMemo(() => loadExams(), [])
+  const navigate = useNavigate()
+  return (
+    <ExamSelect
+      exams={exams}
+      onStartExam={(id) => navigate(`/exams/${id}/session`)}
+      onReviewExam={(id) => navigate(`/exams/${id}/review`)}
+      onViewServices={(id) => navigate(`/exams/${id}/services`)}
+    />
+  )
+}
+
+function ExamReviewPage() {
+  const { examId } = useParams()
+  const exams = useMemo(() => loadExams(), [])
+  const navigate = useNavigate()
+  const exam = exams.find((e) => e.id === examId)
+  if (!exam) return null
+  return <ExamReview exam={exam} onBack={() => navigate("/")} />
+}
+
+function ExamSessionPage() {
+  const { examId } = useParams()
+  const exams = useMemo(() => loadExams(), [])
+  const navigate = useNavigate()
+  const exam = exams.find((e) => e.id === examId)
+  if (!exam) return null
+  return <ExamSession key={exam.id} exam={exam} onBack={() => navigate("/")} />
+}
+
+function ExamServicesPage() {
+  const { examId } = useParams()
+  const exams = useMemo(() => loadExams(), [])
+  const navigate = useNavigate()
+  const exam = exams.find((e) => e.id === examId)
+  if (!exam) return null
+  return <ExamServices exam={exam} onBack={() => navigate("/")} />
+}
+
+const router = createBrowserRouter([
+  {
+    element: <Layout />,
+    children: [
+      { path: "/", element: <ExamSelectPage /> },
+      { path: "/exams/:examId/review", element: <ExamReviewPage /> },
+      { path: "/exams/:examId/session", element: <ExamSessionPage /> },
+      { path: "/exams/:examId/services", element: <ExamServicesPage /> },
+    ],
+  },
+])
+
+export function App() {
+  return <RouterProvider router={router} />
 }
 
 export default App

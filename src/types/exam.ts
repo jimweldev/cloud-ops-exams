@@ -7,8 +7,14 @@ export interface ExamQuestion {
   explanation: string
 }
 
+export interface ExamService {
+  name: string
+  keywords: string[]
+}
+
 export interface ExamData {
   id: string
   title: string
+  services?: ExamService[]
   questions: ExamQuestion[]
 }

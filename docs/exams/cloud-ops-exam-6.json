@@ -1,6 +1,132 @@
 {
   "id": "cloud-ops-exam-6",
   "title": "Practice Test - AWS Certified CloudOps Engineer Associate",
+  "services": [
+    {
+      "name": "AWS CloudFormation",
+      "keywords": ["DeletionPolicy=Retain (keep resource after stack delete)", "DeletionPolicy=Snapshot (snapshot before delete)", "DependsOn for VPC-gateway attachment ordering", "StackSets for multi-account deployment + security findings", "Exports / ImportValue for cross-stack resource sharing", "Resources is the only required section in a template"]
+    },
+    {
+      "name": "AWS Storage Gateway",
+      "keywords": ["Cached Volume Gateway (S3 primary, frequent data cached locally)", "Stored Volume Gateway (primary on-premises, async backup to S3)", "Tape Gateway (replace legacy VTL, predictable retrieval)", "expand stored volume: create new larger disk, edit in console", "File Gateway (NFS/SMB + S3 + local cache)"]
+    },
+    {
+      "name": "Amazon RDS",
+      "keywords": ["AWS manages: backups (5-min point-in-time), OS security patches", "AWS does NOT auto-create read replicas or Multi-AZ", "max backup retention = 35 days (not 1 year)", "SSL/TLS certificate for encryption in transit (modify DB instance)", "FreeStorageSpace metric for available disk space"]
+    },
+    {
+      "name": "Amazon ElastiCache",
+      "keywords": ["Memcached vertical scale: CreateCacheCluster + CacheNodeType (new cluster required)", "cannot use ModifyCacheCluster to change node type on Memcached", "Redis: can modify node type directly (online resizing)"]
+    },
+    {
+      "name": "Amazon EventBridge",
+      "keywords": ["CloudTrail event source for API call patterns (e.g., CreateUser)", "SNS topic as target for email notifications", "Config is NOT a valid event source for API call detection"]
+    },
+    {
+      "name": "Amazon SNS",
+      "keywords": ["email subscription as EventBridge target", "CloudWatch alarm notifications"]
+    },
+    {
+      "name": "Amazon Macie",
+      "keywords": ["discovers sensitive data (PII, financial) in S3 objects", "supports S3 as data source only (not RDS directly)", "use AWS DMS to export RDS data to S3 first, then run Macie job"]
+    },
+    {
+      "name": "AWS DMS (Database Migration Service)",
+      "keywords": ["export RDS PostgreSQL data to S3 for Macie analysis", "minimal downtime during migration"]
+    },
+    {
+      "name": "AWS AWSTOE (Task Orchestrator and Executor)",
+      "keywords": ["orchestrate complex workflows for EC2 Image Builder", "declarative document schema, no code required", "runs on any cloud or on-premises infrastructure"]
+    },
+    {
+      "name": "Amazon EBS",
+      "keywords": ["Provisioned IOPS SSD (io1/io2) for MongoDB and large database workloads", "General Purpose SSD (gp2/gp3) for small-medium workloads", "Cold HDD for infrequently accessed data", "Throughput Optimized HDD for large sequential workloads", "gp3 upgrade for cost-effective consistent 3,000 IOPS (gp2 burst depletes)"]
+    },
+    {
+      "name": "Amazon S3 MFA Delete",
+      "keywords": ["requires MFA to: change versioning state, permanently delete object version", "does NOT require MFA to: rename, move, change ACL"]
+    },
+    {
+      "name": "AWS Config",
+      "keywords": ["s3-bucket-logging-enabled managed rule + auto remediation", "S3 public access detection + remediation", "auto-detect/remediate non-compliant security groups with Config + EventBridge"]
+    },
+    {
+      "name": "Amazon CloudFront",
+      "keywords": ["speeds up static + dynamic content globally", "CloudFront + WAF for SQL injection and DDoS protection", "Origin Access Control (OAC) restricts S3 to CloudFront only", "User-Agent header forwarding for device detection"]
+    },
+    {
+      "name": "AWS Secrets Manager",
+      "keywords": ["GenerateSecretString (auto-generate password in CloudFormation)", "RotationSchedule resource (30-day rotation in CloudFormation)", "SSM Parameter Store cannot rotate passwords automatically"]
+    },
+    {
+      "name": "Amazon SQS",
+      "keywords": ["ApproximateNumberOfMessages for Auto Scaling metric", "ApproximateNumberOfMessagesNotVisible (in-flight, not for scaling)", "Dead Letter Queue (DLQ) for failed message isolation", "FIFO queue for ordered message processing"]
+    },
+    {
+      "name": "AWS VPN (Managed VPN Connection)",
+      "keywords": ["cost-effective on-premises to VPC connection", "cheaper than Direct Connect", "passes over public internet (IPsec encrypted)"]
+    },
+    {
+      "name": "AWS IAM",
+      "keywords": ["IAM role on EC2 instance (not access keys embedded in code)", "least privilege: use specific sqs:SendMessage/ReceiveMessage/DeleteMessage (not sqs:*)", "Inline Policy for strict one-to-one user policy", "iam:PassRole required to assign IAM role to AWS service"]
+    },
+    {
+      "name": "EC2 Auto Scaling Warm Pool",
+      "keywords": ["pre-initialized instances reduce boot latency", "instances drawn from warm pool on scale-out events", "requires ASG + launch template"]
+    },
+    {
+      "name": "Amazon Route 53",
+      "keywords": ["Geoproximity routing with bias value for traffic shifting", "failover routing for active-passive across data centers", "private hosted zone for VPC-only custom DNS"]
+    },
+    {
+      "name": "AWS KMS",
+      "keywords": ["key policies are primary access control", "key scheduled for deletion: 7-30 day waiting period, cannot encrypt/decrypt during this period", "VPC endpoint for private KMS access (traffic stays in AWS network)"]
+    },
+    {
+      "name": "AWS Trusted Advisor + Quota Monitor",
+      "keywords": ["Quota Monitor: Lambda + Trusted Advisor + EventBridge for service limit alerts", "can send to Slack channel or email", "SQS cannot send emails (use SNS or Lambda instead)"]
+    },
+    {
+      "name": "VPC Endpoint",
+      "keywords": ["private S3 access without internet (gateway endpoint)", "private KMS access without internet (interface endpoint)", "no IGW, NAT, or VPN needed for endpoint access"]
+    },
+    {
+      "name": "Application Load Balancer (ALB)",
+      "keywords": ["URL path-based routing", "burstable instances in Unlimited mode for sustained CPU", "ELB access logs for source IP addresses", "cross-zone load balancing for even distribution across AZs"]
+    },
+    {
+      "name": "AWS WAF",
+      "keywords": ["protect ALB from SQL injection and XSS", "cannot be integrated with NLB", "web ACL rules for HTTP flood, SQL injection, cross-site scripting"]
+    },
+    {
+      "name": "Amazon EFS",
+      "keywords": ["shared parallel access for multiple EC2 instances", "high throughput distributed file system", "suitable when multiple instances need simultaneous read/write"]
+    },
+    {
+      "name": "EC2 Image Builder",
+      "keywords": ["automates AMI patching and updates", "pipeline produces updated AMIs with latest security patches"]
+    },
+    {
+      "name": "Amazon GuardDuty",
+      "keywords": ["continuous malicious activity detection across multiple accounts", "monitors S3 data plane, CloudTrail, VPC Flow Logs, DNS logs"]
+    },
+    {
+      "name": "AWS Security Hub",
+      "keywords": ["multi-account security findings aggregation", "deploy CloudFormation StackSets to enable across org + investigate findings", "CIS Benchmark checks across accounts"]
+    },
+    {
+      "name": "Amazon CloudWatch High-Resolution Metrics",
+      "keywords": ["1-second granularity with --storage-resolution 1 flag", "put-metric-data API with StorageResolution=1"]
+    },
+    {
+      "name": "AWS Direct Connect",
+      "keywords": ["dedicated private connectivity bypassing internet", "more expensive than VPN but consistent network experience"]
+    },
+    {
+      "name": "AWS CloudHSM",
+      "keywords": ["tamper-resistant hardware", "AWS cannot access customer keys (unlike KMS)"]
+    }
+  ],
   "questions": [
     {
       "number": 1,
