@@ -41,9 +41,10 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
     Map<number, boolean>
   >(new Map())
   const [sessionKey, setSessionKey] = useState(0)
+  const [retakeIndices, setRetakeIndices] = useState<number[] | null>(null)
 
   const { questionOrder, choiceOrders } = useMemo(() => {
-    const indices = exam.questions.map((_, i) => i)
+    const indices = retakeIndices ?? exam.questions.map((_, i) => i)
     const qOrder = randomize ? shuffleArray(indices) : indices
 
     const cOrders = new Map<number, number[]>()
@@ -54,11 +55,11 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
 
     return { questionOrder: qOrder, choiceOrders: cOrders }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [exam, randomize, sessionKey])
+  }, [exam, randomize, sessionKey, retakeIndices])
 
   const currentQuestionIdx = questionOrder[currentIndex]
   const currentQuestion = exam.questions[currentQuestionIdx]
-  const totalQuestions = exam.questions.length
+  const totalQuestions = questionOrder.length
   const isMultipleAnswer = currentQuestion.correctAnswers.length > 1
 
   const currentSelected =
@@ -135,14 +136,31 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
     setCurrentIndex(0)
     setSelectedAnswers(new Map())
     setSubmittedQuestions(new Map())
+    setRetakeIndices(null)
     setSessionKey((k) => k + 1)
   }, [])
+
+  const handleRetakeIncorrect = useCallback(() => {
+    const incorrectIndices: number[] = []
+    submittedQuestions.forEach((correct, questionNumber) => {
+      if (!correct) {
+        const idx = exam.questions.findIndex((q) => q.number === questionNumber)
+        if (idx !== -1) incorrectIndices.push(idx)
+      }
+    })
+    setRetakeIndices(incorrectIndices)
+    setCurrentIndex(0)
+    setSelectedAnswers(new Map())
+    setSubmittedQuestions(new Map())
+    setSessionKey((k) => k + 1)
+  }, [submittedQuestions, exam.questions])
 
   const handleRandomizeChange = useCallback((checked: boolean) => {
     setRandomize(checked)
     setCurrentIndex(0)
     setSelectedAnswers(new Map())
     setSubmittedQuestions(new Map())
+    setRetakeIndices(null)
     setSessionKey((k) => k + 1)
   }, [])
 
@@ -229,10 +247,18 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
                     ? "Good effort, keep studying!"
                     : "Keep practicing!"}
               </p>
-              <Button className="mt-4" onClick={handleRestart}>
-                <RotateCcw data-icon="inline-start" />
-                Try Again
-              </Button>
+              <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+                <Button onClick={handleRestart}>
+                  <RotateCcw data-icon="inline-start" />
+                  Try Again
+                </Button>
+                {score < totalQuestions && (
+                  <Button variant="outline" onClick={handleRetakeIncorrect}>
+                    <RotateCcw data-icon="inline-start" />
+                    Retake Incorrect ({totalQuestions - score})
+                  </Button>
+                )}
+              </div>
             </div>
           </CardContent>
         </Card>
