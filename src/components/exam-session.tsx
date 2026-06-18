@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useEffect, useRef } from "react"
+import { useState, useCallback, useMemo, useEffect } from "react"
 import type { ExamData } from "@/types/exam"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -15,7 +15,6 @@ import {
   Lightbulb,
   Shuffle,
   Play,
-  Pause,
 } from "lucide-react"
 
 function shuffleArray<T>(arr: T[]): T[] {
@@ -27,11 +26,6 @@ function shuffleArray<T>(arr: T[]): T[] {
   return shuffled
 }
 
-// Auto-mode pacing: time to read the question before answering, and time to
-// read the explanation before advancing.
-const QUESTION_DURATION_MS = 10000
-const ANSWER_DURATION_MS = 5000
-
 interface ExamSessionProps {
   exam: ExamData
   onBack: () => void
@@ -41,8 +35,6 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
   const [randomize, setRandomize] = useState(false)
   const [showSimplified, setShowSimplified] = useState(false)
   const [autoMode, setAutoMode] = useState(false)
-  const [autoPaused, setAutoPaused] = useState(false)
-  const [countdown, setCountdown] = useState(0)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [selectedAnswers, setSelectedAnswers] = useState<
     Map<number, Set<string>>
@@ -189,86 +181,19 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
     })
   }, [currentQuestion])
 
-  // Tracks the time left in the current auto step, preserved across pauses.
-  const autoRemainingRef = useRef(0)
-  const lastPhaseKeyRef = useRef("")
-  // Identifies the current auto step so we know when to reset the countdown.
-  const autoPhaseKey = `${sessionKey}-${currentIndex}-${isSubmitted}`
-
-  // Auto mode driver: read the question → answer → read the explanation → next.
-  // Runs a deadline-based countdown so the remaining time can be displayed and
-  // frozen when paused.
-  useEffect(() => {
-    if (!autoMode || totalAnswered === totalQuestions) {
-      setCountdown(0)
-      return
-    }
-
-    // Determine the action for the current step and how long to wait for it.
-    let action: () => void
-    let duration: number
+  // Auto mode step: reveal the answer, then advance to the next question.
+  // Driven by the spacebar (desktop) or the Continue button (mobile/tap).
+  const handleAutoAdvance = useCallback(() => {
     if (!isSubmitted) {
-      // Phase 1: give time to read the question + choices, then answer.
-      action = autoSubmit
-      duration = QUESTION_DURATION_MS
+      // Phase 1: reveal the correct answer for the current question.
+      autoSubmit()
     } else if (currentIndex < totalQuestions - 1) {
-      // Phase 2: question is answered. Read the explanation, then advance.
-      action = handleNext
-      duration = ANSWER_DURATION_MS
-    } else {
-      setCountdown(0)
-      return
+      // Phase 2: question is answered. Advance to the next question.
+      handleNext()
     }
+  }, [isSubmitted, currentIndex, totalQuestions, autoSubmit, handleNext])
 
-    // Entering a new step resets the countdown to its full duration.
-    if (lastPhaseKeyRef.current !== autoPhaseKey) {
-      lastPhaseKeyRef.current = autoPhaseKey
-      autoRemainingRef.current = duration
-    }
-
-    if (autoPaused) {
-      setCountdown(Math.ceil(autoRemainingRef.current / 1000))
-      return
-    }
-
-    const startedAt = Date.now()
-    const startRemaining = autoRemainingRef.current
-    setCountdown(Math.max(0, Math.ceil(startRemaining / 1000)))
-
-    const timer = setTimeout(action, startRemaining)
-    const ticker = setInterval(() => {
-      const left = Math.max(0, startRemaining - (Date.now() - startedAt))
-      autoRemainingRef.current = left
-      setCountdown(Math.ceil(left / 1000))
-    }, 200)
-
-    return () => {
-      clearTimeout(timer)
-      clearInterval(ticker)
-      // Save whatever time was left so a pause can resume from here.
-      autoRemainingRef.current = Math.max(
-        0,
-        startRemaining - (Date.now() - startedAt)
-      )
-    }
-  }, [
-    autoMode,
-    autoPaused,
-    isSubmitted,
-    totalAnswered,
-    currentIndex,
-    totalQuestions,
-    autoSubmit,
-    handleNext,
-    autoPhaseKey,
-  ])
-
-  const handleAutoModeChange = useCallback((checked: boolean) => {
-    setAutoMode(checked)
-    if (!checked) setAutoPaused(false)
-  }, [])
-
-  // Spacebar toggles play/pause while auto mode is running.
+  // Spacebar advances the current auto step.
   useEffect(() => {
     if (!autoMode || totalAnswered === totalQuestions) return
     const onKeyDown = (e: KeyboardEvent) => {
@@ -279,11 +204,11 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
         return
       }
       e.preventDefault()
-      setAutoPaused((p) => !p)
+      handleAutoAdvance()
     }
     window.addEventListener("keydown", onKeyDown)
     return () => window.removeEventListener("keydown", onKeyDown)
-  }, [autoMode, totalAnswered, totalQuestions])
+  }, [autoMode, totalAnswered, totalQuestions, handleAutoAdvance])
 
   const choiceOrder =
     choiceOrders.get(currentQuestion.number) ||
@@ -353,7 +278,7 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
             <Switch
               id="auto"
               checked={autoMode}
-              onCheckedChange={handleAutoModeChange}
+              onCheckedChange={setAutoMode}
             />
             <Label
               htmlFor="auto"
@@ -365,25 +290,15 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
           </div>
           {autoMode && !isFinished && (
             <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setAutoPaused((p) => !p)}
-              >
-                {autoPaused ? (
-                  <>
-                    <Play data-icon="inline-start" />
-                    Resume
-                  </>
-                ) : (
-                  <>
-                    <Pause data-icon="inline-start" />
-                    Pause
-                  </>
-                )}
+              <Button size="sm" onClick={handleAutoAdvance}>
+                {isSubmitted ? "Next Question" : "Reveal Answer"}
+                <ArrowRight data-icon="inline-end" />
               </Button>
-              <span className="text-sm tabular-nums text-muted-foreground">
-                {autoPaused ? "Paused" : `Next in ${countdown}s`}
+              <span className="hidden text-sm text-muted-foreground sm:inline">
+                or press{" "}
+                <kbd className="rounded border bg-muted px-1.5 py-0.5 font-mono text-xs">
+                  Space
+                </kbd>
               </span>
             </div>
           )}
