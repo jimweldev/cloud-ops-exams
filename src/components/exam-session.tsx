@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react"
+import { useState, useCallback, useMemo, useEffect } from "react"
 import type { ExamData } from "@/types/exam"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -14,6 +14,7 @@ import {
   Home,
   Lightbulb,
   Shuffle,
+  Play,
 } from "lucide-react"
 
 function shuffleArray<T>(arr: T[]): T[] {
@@ -25,6 +26,13 @@ function shuffleArray<T>(arr: T[]): T[] {
   return shuffled
 }
 
+// Estimate how long a human needs to read a block of text.
+// ~200 wpm reading speed → ~300ms per word, clamped to a sane range.
+function readingDelayMs(text: string, minMs: number): number {
+  const words = text.trim().split(/\s+/).filter(Boolean).length
+  return Math.min(Math.max(words * 300, minMs), 15000)
+}
+
 interface ExamSessionProps {
   exam: ExamData
   onBack: () => void
@@ -33,6 +41,7 @@ interface ExamSessionProps {
 export function ExamSession({ exam, onBack }: ExamSessionProps) {
   const [randomize, setRandomize] = useState(false)
   const [showSimplified, setShowSimplified] = useState(false)
+  const [autoMode, setAutoMode] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [selectedAnswers, setSelectedAnswers] = useState<
     Map<number, Set<string>>
@@ -164,6 +173,56 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
     setSessionKey((k) => k + 1)
   }, [])
 
+  // Auto mode: fill in the correct answer(s) and mark the question submitted.
+  const autoSubmit = useCallback(() => {
+    const correctAnswers = currentQuestion.correctAnswers
+    setSelectedAnswers((prev) => {
+      const next = new Map(prev)
+      next.set(currentQuestion.number, new Set(correctAnswers))
+      return next
+    })
+    setSubmittedQuestions((prev) => {
+      const next = new Map(prev)
+      next.set(currentQuestion.number, true)
+      return next
+    })
+  }, [currentQuestion])
+
+  // Auto mode driver: read the question → answer → read the explanation → next.
+  useEffect(() => {
+    if (!autoMode || totalAnswered === totalQuestions) return
+
+    if (!isSubmitted) {
+      // Phase 1: give time to read the question + choices, then answer.
+      const qText =
+        showSimplified && currentQuestion.simplifiedQuestion
+          ? currentQuestion.simplifiedQuestion
+          : currentQuestion.question
+      const text = `${qText} ${currentQuestion.choices.join(" ")}`
+      const timer = setTimeout(autoSubmit, readingDelayMs(text, 3000))
+      return () => clearTimeout(timer)
+    }
+
+    // Phase 2: question is answered. Read the explanation, then advance.
+    if (currentIndex < totalQuestions - 1) {
+      const timer = setTimeout(
+        handleNext,
+        readingDelayMs(currentQuestion.explanation, 2500)
+      )
+      return () => clearTimeout(timer)
+    }
+  }, [
+    autoMode,
+    isSubmitted,
+    totalAnswered,
+    currentIndex,
+    totalQuestions,
+    currentQuestion,
+    showSimplified,
+    autoSubmit,
+    handleNext,
+  ])
+
   const choiceOrder =
     choiceOrders.get(currentQuestion.number) ||
     currentQuestion.choices.map((_, i) => i)
@@ -226,6 +285,16 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
             >
               <Lightbulb className="size-3.5" />
               Simplified
+            </Label>
+          </div>
+          <div className="flex items-center gap-2">
+            <Switch id="auto" checked={autoMode} onCheckedChange={setAutoMode} />
+            <Label
+              htmlFor="auto"
+              className="flex cursor-pointer items-center gap-1.5 text-sm"
+            >
+              <Play className="size-3.5" />
+              Auto
             </Label>
           </div>
         </div>
