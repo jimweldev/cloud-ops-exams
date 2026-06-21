@@ -3,6 +3,7 @@ import type { ExamData } from "@/types/exam"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
+import { Toggle } from "@/components/ui/toggle"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import {
@@ -15,6 +16,10 @@ import {
   Lightbulb,
   Shuffle,
   Play,
+  Flame,
+  Copy,
+  Check,
+  BookOpen,
 } from "lucide-react"
 
 function shuffleArray<T>(arr: T[]): T[] {
@@ -34,6 +39,7 @@ interface ExamSessionProps {
 export function ExamSession({ exam, onBack }: ExamSessionProps) {
   const [randomize, setRandomize] = useState(false)
   const [showSimplified, setShowSimplified] = useState(false)
+  const [showExplanation, setShowExplanation] = useState(false)
   const [autoMode, setAutoMode] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [selectedAnswers, setSelectedAnswers] = useState<
@@ -44,6 +50,8 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
   >(new Map())
   const [sessionKey, setSessionKey] = useState(0)
   const [retakeIndices, setRetakeIndices] = useState<number[] | null>(null)
+  const [reviewList, setReviewList] = useState<Set<number>>(new Set())
+  const [copied, setCopied] = useState(false)
 
   const { questionOrder, choiceOrders } = useMemo(() => {
     const indices = retakeIndices ?? exam.questions.map((_, i) => i)
@@ -68,6 +76,13 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
     selectedAnswers.get(currentQuestion.number) || new Set()
   const isSubmitted = submittedQuestions.has(currentQuestion.number)
   const isCorrect = submittedQuestions.get(currentQuestion.number) ?? false
+  const inReviewList = reviewList.has(currentQuestion.number)
+
+  // For multiple-answer questions, require the exact number of selections
+  // before the answer can be submitted.
+  const canSubmit = isMultipleAnswer
+    ? currentSelected.size === currentQuestion.correctAnswers.length
+    : currentSelected.size === 1
 
   const score = useMemo(() => {
     let correct = 0
@@ -122,6 +137,21 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
     })
   }, [currentSelected, currentQuestion])
 
+  const handleToggleReview = useCallback(
+    (pressed: boolean) => {
+      setReviewList((prev) => {
+        const next = new Set(prev)
+        if (pressed) {
+          next.add(currentQuestion.number)
+        } else {
+          next.delete(currentQuestion.number)
+        }
+        return next
+      })
+    },
+    [currentQuestion]
+  )
+
   const handleNext = useCallback(() => {
     if (currentIndex < totalQuestions - 1) {
       setCurrentIndex((i) => i + 1)
@@ -139,6 +169,7 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
     setSelectedAnswers(new Map())
     setSubmittedQuestions(new Map())
     setRetakeIndices(null)
+    setReviewList(new Set())
     setSessionKey((k) => k + 1)
   }, [])
 
@@ -163,6 +194,7 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
     setSelectedAnswers(new Map())
     setSubmittedQuestions(new Map())
     setRetakeIndices(null)
+    setReviewList(new Set())
     setSessionKey((k) => k + 1)
   }, [])
 
@@ -216,6 +248,45 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
   const orderedChoices = choiceOrder.map((i) => currentQuestion.choices[i])
 
   const isFinished = totalAnswered === totalQuestions
+
+  const reviewQuestions = useMemo(() => {
+    return exam.questions.filter((q) => reviewList.has(q.number))
+  }, [exam.questions, reviewList])
+
+  const buildReviewPrompt = useCallback(() => {
+    const intro =
+      `I'm studying for the AWS Certified CloudOps exam and flagged these questions for review. ` +
+      `For each one, please review and explain the correct answer in simple terms, ` +
+      `clarify why the other options are wrong, and share any tips or related concepts ` +
+      `I should remember.\n\n` +
+      `Exam: ${exam.title}\n\n`
+
+    const body = reviewQuestions
+      .map((q, i) => {
+        const choices = q.choices.map((c) => `- ${c}`).join("\n")
+        const answers = q.correctAnswers.map((a) => `- ${a}`).join("\n")
+        return (
+          `### Question ${i + 1} (original #${q.number})\n` +
+          `${q.question}\n\n` +
+          `Choices:\n${choices}\n\n` +
+          `Correct answer(s):\n${answers}\n\n` +
+          `Provided explanation: ${q.explanation}`
+        )
+      })
+      .join("\n\n---\n\n")
+
+    return intro + body
+  }, [exam.title, reviewQuestions])
+
+  const handleCopyPrompt = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(buildReviewPrompt())
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      setCopied(false)
+    }
+  }, [buildReviewPrompt])
 
   const displayQuestion =
     showSimplified && currentQuestion.simplifiedQuestion
@@ -272,6 +343,20 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
             >
               <Lightbulb className="size-3.5" />
               Simplified
+            </Label>
+          </div>
+          <div className="flex items-center gap-2">
+            <Switch
+              id="explanation"
+              checked={showExplanation}
+              onCheckedChange={setShowExplanation}
+            />
+            <Label
+              htmlFor="explanation"
+              className="flex cursor-pointer items-center gap-1.5 text-sm"
+            >
+              <BookOpen className="size-3.5" />
+              Explanation
             </Label>
           </div>
           <div className="flex items-center gap-2">
@@ -334,6 +419,35 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
                 )}
               </div>
             </div>
+
+            {reviewQuestions.length > 0 && (
+              <div className="mt-6 border-t border-border/50 pt-6 text-left">
+                <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                  <h3 className="flex items-center gap-1.5 text-sm font-semibold">
+                    <Flame className="size-4 text-orange-500" />
+                    Review list ({reviewQuestions.length})
+                  </h3>
+                  <Button size="sm" onClick={handleCopyPrompt}>
+                    {copied ? (
+                      <Check data-icon="inline-start" />
+                    ) : (
+                      <Copy data-icon="inline-start" />
+                    )}
+                    {copied ? "Copied!" : "Copy ChatGPT prompt"}
+                  </Button>
+                </div>
+                <ol className="space-y-1.5 text-sm text-muted-foreground">
+                  {reviewQuestions.map((q) => (
+                    <li key={q.number} className="flex gap-2">
+                      <span className="shrink-0 font-medium text-foreground">
+                        #{q.number}
+                      </span>
+                      <span className="line-clamp-2">{q.question}</span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            )}
           </CardContent>
         </Card>
       )}
@@ -385,9 +499,24 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
               </>
             )}
           </div>
-          <p className="text-sm leading-relaxed text-muted-foreground">
-            {currentQuestion.explanation}
-          </p>
+          {showExplanation && (
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              {currentQuestion.explanation}
+            </p>
+          )}
+
+          <div className="mt-4 flex items-center gap-2 border-t border-border/50 pt-3">
+            <Toggle
+              variant="outline"
+              size="sm"
+              pressed={inReviewList}
+              onPressedChange={handleToggleReview}
+              className="aria-pressed:bg-orange-600 aria-pressed:text-white"
+            >
+              <Flame data-icon="inline-start" />
+              {inReviewList ? "Added to review" : "Add to review"}
+            </Toggle>
+          </div>
         </div>
       )}
 
@@ -405,7 +534,7 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
         {!isSubmitted && (
           <Button
             onClick={handleSubmit}
-            disabled={currentSelected.size === 0}
+            disabled={!canSubmit}
             className="bg-green-600 text-white hover:bg-green-700"
           >
             Submit Answer
