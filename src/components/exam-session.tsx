@@ -51,7 +51,7 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
   const [sessionKey, setSessionKey] = useState(0)
   const [retakeIndices, setRetakeIndices] = useState<number[] | null>(null)
   const [reviewList, setReviewList] = useState<Set<number>>(new Set())
-  const [copied, setCopied] = useState(false)
+  const [copied, setCopied] = useState<"review" | "incorrect" | null>(null)
 
   const { questionOrder, choiceOrders } = useMemo(() => {
     const indices = retakeIndices ?? exam.questions.map((_, i) => i)
@@ -253,40 +253,61 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
     return exam.questions.filter((q) => reviewList.has(q.number))
   }, [exam.questions, reviewList])
 
-  const buildReviewPrompt = useCallback(() => {
-    const intro =
-      `I'm studying for the AWS Certified CloudOps exam and flagged these questions for review. ` +
-      `For each one, please review and explain the correct answer in simple terms, ` +
-      `clarify why the other options are wrong, and share any tips or related concepts ` +
-      `I should remember.\n\n` +
-      `Exam: ${exam.title}\n\n`
+  const incorrectQuestions = useMemo(() => {
+    return exam.questions.filter((q) => submittedQuestions.get(q.number) === false)
+  }, [exam.questions, submittedQuestions])
 
-    const body = reviewQuestions
-      .map((q, i) => {
-        const choices = q.choices.map((c) => `- ${c}`).join("\n")
-        const answers = q.correctAnswers.map((a) => `- ${a}`).join("\n")
-        return (
-          `### Question ${i + 1} (original #${q.number})\n` +
-          `${q.question}\n\n` +
-          `Choices:\n${choices}\n\n` +
-          `Correct answer(s):\n${answers}\n\n` +
-          `Provided explanation: ${q.explanation}`
-        )
-      })
-      .join("\n\n---\n\n")
+  const buildPrompt = useCallback(
+    (intro: string, questions: ExamData["questions"]) => {
+      const body = questions
+        .map((q, i) => {
+          const choices = q.choices.map((c) => `- ${c}`).join("\n")
+          const answers = q.correctAnswers.map((a) => `- ${a}`).join("\n")
+          return (
+            `### Question ${i + 1} (original #${q.number})\n` +
+            `${q.question}\n\n` +
+            `Choices:\n${choices}\n\n` +
+            `Correct answer(s):\n${answers}\n\n` +
+            `Provided explanation: ${q.explanation}`
+          )
+        })
+        .join("\n\n---\n\n")
 
-    return intro + body
-  }, [exam.title, reviewQuestions])
+      return (
+        `${intro}\n\nExam: ${exam.title}\n\n` + body
+      )
+    },
+    [exam.title]
+  )
 
-  const handleCopyPrompt = useCallback(async () => {
-    try {
-      await navigator.clipboard.writeText(buildReviewPrompt())
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
-    } catch {
-      setCopied(false)
-    }
-  }, [buildReviewPrompt])
+  const handleCopyPrompt = useCallback(
+    async (which: "review" | "incorrect") => {
+      const text =
+        which === "review"
+          ? buildPrompt(
+              `I'm studying for the AWS Certified CloudOps exam and flagged these questions for review. ` +
+                `For each one, please review and explain the correct answer in simple terms, ` +
+                `clarify why the other options are wrong, and share any tips or related concepts ` +
+                `I should remember.`,
+              reviewQuestions
+            )
+          : buildPrompt(
+              `I'm studying for the AWS Certified CloudOps exam and got these questions wrong. ` +
+                `For each one, please explain why the correct answer is right and why I likely ` +
+                `picked the wrong option, in simple terms, plus any tips or related concepts ` +
+                `I should remember.`,
+              incorrectQuestions
+            )
+      try {
+        await navigator.clipboard.writeText(text)
+        setCopied(which)
+        setTimeout(() => setCopied(null), 2000)
+      } catch {
+        setCopied(null)
+      }
+    },
+    [buildPrompt, reviewQuestions, incorrectQuestions]
+  )
 
   const displayQuestion =
     showSimplified && currentQuestion.simplifiedQuestion
@@ -420,6 +441,40 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
               </div>
             </div>
 
+            {incorrectQuestions.length > 0 && (
+              <div className="mt-6 border-t border-border/50 pt-6 text-left">
+                <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                  <h3 className="flex items-center gap-1.5 text-sm font-semibold">
+                    <XCircle className="size-4 text-destructive" />
+                    Incorrect questions ({incorrectQuestions.length})
+                  </h3>
+                  <Button
+                    size="sm"
+                    onClick={() => handleCopyPrompt("incorrect")}
+                  >
+                    {copied === "incorrect" ? (
+                      <Check data-icon="inline-start" />
+                    ) : (
+                      <Copy data-icon="inline-start" />
+                    )}
+                    {copied === "incorrect"
+                      ? "Copied!"
+                      : "Copy incorrect prompt"}
+                  </Button>
+                </div>
+                <ol className="space-y-1.5 text-sm text-muted-foreground">
+                  {incorrectQuestions.map((q) => (
+                    <li key={q.number} className="flex gap-2">
+                      <span className="shrink-0 font-medium text-foreground">
+                        #{q.number}
+                      </span>
+                      <span className="line-clamp-2">{q.question}</span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            )}
+
             {reviewQuestions.length > 0 && (
               <div className="mt-6 border-t border-border/50 pt-6 text-left">
                 <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
@@ -427,13 +482,13 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
                     <Flame className="size-4 text-orange-500" />
                     Review list ({reviewQuestions.length})
                   </h3>
-                  <Button size="sm" onClick={handleCopyPrompt}>
-                    {copied ? (
+                  <Button size="sm" onClick={() => handleCopyPrompt("review")}>
+                    {copied === "review" ? (
                       <Check data-icon="inline-start" />
                     ) : (
                       <Copy data-icon="inline-start" />
                     )}
-                    {copied ? "Copied!" : "Copy ChatGPT prompt"}
+                    {copied === "review" ? "Copied!" : "Copy review prompt"}
                   </Button>
                 </div>
                 <ol className="space-y-1.5 text-sm text-muted-foreground">
