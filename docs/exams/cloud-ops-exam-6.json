@@ -609,10 +609,10 @@
     },
     {
       "number": 32,
-      "question": "A newly hired CloudOps Engineer is tasked with managing Amazon S3 bucket policies in AWS accounts. The engineer must first understand how policies are created and how to apply the policies to the buckets while accessing the S3 bucket through a VPC Gateway endpoint. In this case, what does the following S3 bucket policy do?",
+      "question": "A newly hired CloudOps Engineer is tasked with managing Amazon S3 bucket policies in AWS accounts. The engineer must first understand how policies are created and how to apply the policies to the buckets while accessing the S3 bucket through a VPC Gateway endpoint. In this case, what does the following S3 bucket policy do?\n\n{ \"Version\":\"2012-10-17\", \"Statement\":[ { \"Sid\":\"AddCannedAcl\", \"Effect\":\"Allow\", \"Principal\": {\"AWS\": [\"arn:aws:iam::111122223333:root\",\"arn:aws:iam::444455556666:root\"]}, \"Action\":[\"s3:PutObject\",\"s3:PutObjectAcl\"], \"Resource\":[\"arn:aws:s3:::tutorialsdojo/*\"], \"Condition\":{\"StringEquals\":{\"s3:x-amz-acl\":[\"public-read\"]}} } ] }",
       "simplifiedQuestion": "What does an S3 bucket policy granting s3:PutObject to two AWS accounts with a public-read ACL condition do?",
       "choices": [
-        "{ \"Version\":\"2012-10-17\", \"Statement\":[ { \"Sid\":\"AddCannedAcl\", \"Effect\":\"Allow\", \"Principal\": {\"AWS\": [\"arn:aws:iam::111122223333:root\",\"arn:aws:iam::444455556666:root\"]}, \"Action\":[\"s3:PutObject\",\"s3:PutObjectAcl\"], \"Resource\":[\"arn:aws:s3:::tutorialsdojo/*\"], \"Condition\":{\"StringEquals\":{\"s3:x-amz-acl\":[\"public-read\"]}} } ] } It is granting cross-account permissions to upload objects while ensuring the bucket owner has full control.",
+        "It is granting cross-account permissions to upload objects while ensuring the bucket owner has full control.",
         "It is granting read-only permissions to anonymous users.",
         "It is granting permissions to multiple accounts with added conditions.",
         "It is granting permissions to an Amazon CloudFront Origin Access Control (OAC) to securely deliver private content from the S3 bucket."

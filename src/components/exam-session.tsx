@@ -155,6 +155,7 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
   const handleNext = useCallback(() => {
     if (currentIndex < totalQuestions - 1) {
       setCurrentIndex((i) => i + 1)
+      setShowExplanation(false)
     }
   }, [currentIndex, totalQuestions])
 
@@ -368,20 +369,6 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
           </div>
           <div className="flex items-center gap-2">
             <Switch
-              id="explanation"
-              checked={showExplanation}
-              onCheckedChange={setShowExplanation}
-            />
-            <Label
-              htmlFor="explanation"
-              className="flex cursor-pointer items-center gap-1.5 text-sm"
-            >
-              <BookOpen className="size-3.5" />
-              Explanation
-            </Label>
-          </div>
-          <div className="flex items-center gap-2">
-            <Switch
               id="auto"
               checked={autoMode}
               onCheckedChange={setAutoMode}
@@ -509,9 +496,10 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
 
       {/* Question text — flat, no card */}
       <div className="space-y-2">
-        <h2 className="text-lg leading-relaxed font-semibold">
-          {displayQuestion}
-        </h2>
+        <RichText
+          text={displayQuestion}
+          proseClassName="text-lg leading-relaxed font-semibold"
+        />
         <p className="text-sm text-muted-foreground">
           {isMultipleAnswer
             ? `Select ${currentQuestion.correctAnswers.length} answers`
@@ -539,25 +527,39 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
         <div
           className={`rounded-xl border p-4 ${isCorrect ? "border-green-500/30 bg-green-500/5" : "border-destructive/30 bg-destructive/5"}`}
         >
-          <div className="mb-2 flex items-center gap-2 text-sm font-medium">
-            {isCorrect ? (
-              <>
-                <CheckCircle className="size-4 text-green-500" />
-                <span className="text-green-700 dark:text-green-400">
-                  Correct!
-                </span>
-              </>
-            ) : (
-              <>
-                <XCircle className="size-4 text-destructive" />
-                <span className="text-destructive">Incorrect</span>
-              </>
-            )}
+          <div className="mb-2 flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 text-sm font-medium">
+              {isCorrect ? (
+                <>
+                  <CheckCircle className="size-4 text-green-500" />
+                  <span className="text-green-700 dark:text-green-400">
+                    Correct!
+                  </span>
+                </>
+              ) : (
+                <>
+                  <XCircle className="size-4 text-destructive" />
+                  <span className="text-destructive">Incorrect</span>
+                </>
+              )}
+            </div>
+            <Toggle
+              variant="outline"
+              size="sm"
+              pressed={showExplanation}
+              onPressedChange={setShowExplanation}
+            >
+              <BookOpen data-icon="inline-start" />
+              Explanation
+            </Toggle>
           </div>
           {showExplanation && (
-            <p className="text-sm leading-relaxed text-muted-foreground">
-              {currentQuestion.explanation}
-            </p>
+            <div className="space-y-2">
+              <RichText
+                text={currentQuestion.explanation}
+                proseClassName="text-sm leading-relaxed text-muted-foreground"
+              />
+            </div>
           )}
 
           <div className="mt-4 flex items-center gap-2 border-t border-border/50 pt-3">
@@ -645,6 +647,108 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
   )
 }
 
+/**
+ * Find the index of the bracket that closes the one at `start`, or -1 if the
+ * region isn't balanced. Quotes (and their escapes) are skipped so braces
+ * inside JSON string values don't throw off the depth count.
+ */
+function findBalancedEnd(s: string, start: number): number {
+  let depth = 0
+  let inStr = false
+  for (let i = start; i < s.length; i++) {
+    const c = s[i]
+    if (inStr) {
+      if (c === "\\") i++
+      else if (c === '"') inStr = false
+      continue
+    }
+    if (c === '"') inStr = true
+    else if (c === "{" || c === "[") depth++
+    else if (c === "}" || c === "]") {
+      depth--
+      if (depth === 0) return i
+    }
+  }
+  return -1
+}
+
+/**
+ * Split text into prose and code segments. Any embedded JSON object/array —
+ * whether it sits on its own or inline after some prose (e.g. "Use this
+ * policy: {…}") — is pulled out and rendered as a pretty-printed code block;
+ * the rest stays prose. Used by questions, choices, and explanations so
+ * policy/JSON snippets don't render as a collapsed wall of text.
+ */
+function parseRichSegments(text: string): { code: boolean; text: string }[] {
+  const segments: { code: boolean; text: string }[] = []
+  for (const para of text.split(/\n{2,}/)) {
+    let rest = para
+    let prose = ""
+    while (rest.length) {
+      const idx = rest.search(/[[{]/)
+      if (idx === -1) {
+        prose += rest
+        break
+      }
+      const end = findBalancedEnd(rest, idx)
+      let pretty: string | null = null
+      if (end !== -1) {
+        try {
+          const parsed = JSON.parse(rest.slice(idx, end + 1))
+          const size = Array.isArray(parsed)
+            ? parsed.length
+            : parsed && typeof parsed === "object"
+              ? Object.keys(parsed).length
+              : 0
+          if (size > 0) pretty = JSON.stringify(parsed, null, 2)
+        } catch {
+          /* not valid JSON — leave the bracket in the prose */
+        }
+      }
+      if (pretty === null) {
+        prose += rest.slice(0, idx + 1)
+        rest = rest.slice(idx + 1)
+        continue
+      }
+      prose += rest.slice(0, idx)
+      if (prose.trim()) segments.push({ code: false, text: prose.trim() })
+      prose = ""
+      segments.push({ code: true, text: pretty })
+      rest = rest.slice(end + 1)
+    }
+    if (prose.trim()) segments.push({ code: false, text: prose.trim() })
+  }
+  return segments
+}
+
+function RichText({
+  text,
+  proseClassName,
+}: {
+  text: string
+  proseClassName?: string
+}) {
+  const segments = useMemo(() => parseRichSegments(text), [text])
+  return (
+    <>
+      {segments.map((seg, i) =>
+        seg.code ? (
+          <pre
+            key={i}
+            className="overflow-x-auto rounded-lg border bg-muted/50 p-3 font-mono text-xs leading-relaxed whitespace-pre"
+          >
+            {seg.text}
+          </pre>
+        ) : (
+          <p key={i} className={proseClassName}>
+            {seg.text}
+          </p>
+        ),
+      )}
+    </>
+  )
+}
+
 function ChoiceButton({
   choiceText,
   isMultiple,
@@ -699,7 +803,9 @@ function ChoiceButton({
         )}
       </span>
 
-      <span className="flex-1 text-sm">{choiceText}</span>
+      <div className="min-w-0 flex-1 space-y-1.5 text-sm">
+        <RichText text={choiceText} />
+      </div>
 
       {isSubmitted && isCorrectChoice && (
         <CheckCircle className="size-5 shrink-0 text-green-500" />

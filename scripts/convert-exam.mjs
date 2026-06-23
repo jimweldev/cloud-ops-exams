@@ -489,6 +489,33 @@ const PATCHES_BY_EXAM = {
   },
 
   'cloud-ops-exam-6': {
+    // Q32 embeds a JSON bucket policy *after* the question mark, which the
+    // parser glues onto the first choice. Move it into the question.
+    32(q) {
+      const policy = [
+        '{',
+        '"Version": "2012-10-17",',
+        '"Statement": [',
+        '{',
+        '"Sid": "AddCannedAcl",',
+        '"Effect": "Allow",',
+        '"Principal": { "AWS": ["arn:aws:iam::111122223333:root", "arn:aws:iam::444455556666:root"] },',
+        '"Action": ["s3:PutObject", "s3:PutObjectAcl"],',
+        '"Resource": ["arn:aws:s3:::tutorialsdojo/*"],',
+        '"Condition": { "StringEquals": { "s3:x-amz-acl": ["public-read"] } }',
+        '}',
+        ']',
+        '}',
+      ].join('\n');
+      q.question = `${q.question}\n\n${policy}`;
+      q.choices = [
+        'It is granting cross-account permissions to upload objects while ensuring the bucket owner has full control.',
+        'It is granting read-only permissions to anonymous users.',
+        'It is granting permissions to multiple accounts with added conditions.',
+        'It is granting permissions to an Amazon CloudFront Origin Access Control (OAC) to securely deliver private content from the S3 bucket.',
+      ];
+      q.correctAnswers = [q.choices[2]];
+    },
     // Q40's explanation describes the answer in prose without a "correct
     // answer is" statement and without calling the other options incorrect.
     40(q) {
