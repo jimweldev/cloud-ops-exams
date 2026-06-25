@@ -20,7 +20,15 @@ import {
   Copy,
   Check,
   BookOpen,
+  Highlighter,
+  Eraser,
 } from "lucide-react"
+
+// Highlighter color classes (full static strings so Tailwind keeps them).
+const HIGHLIGHT_LIT = "bg-sky-200 dark:bg-sky-300/85 dark:text-sky-950"
+const HIGHLIGHT_HOVER = "hover:bg-sky-200/60 dark:hover:bg-sky-300/30"
+
+const EMPTY_HIGHLIGHTS: ReadonlySet<string> = new Set()
 
 function shuffleArray<T>(arr: T[]): T[] {
   const shuffled = [...arr]
@@ -41,6 +49,13 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
   const [showSimplified, setShowSimplified] = useState(false)
   const [showExplanation, setShowExplanation] = useState(false)
   const [autoMode, setAutoMode] = useState(false)
+  const [highlightMode, setHighlightMode] = useState(false)
+  // Per-question highlights. Keyed by question number; each value is a set of
+  // token keys like "q:3" (4th word in the question) or "c1:5" (6th word in the
+  // choice with original index 1).
+  const [highlights, setHighlights] = useState<Map<number, Set<string>>>(
+    new Map()
+  )
   const [currentIndex, setCurrentIndex] = useState(0)
   const [selectedAnswers, setSelectedAnswers] = useState<
     Map<number, Set<string>>
@@ -77,6 +92,8 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
   const isSubmitted = submittedQuestions.has(currentQuestion.number)
   const isCorrect = submittedQuestions.get(currentQuestion.number) ?? false
   const inReviewList = reviewList.has(currentQuestion.number)
+  const currentHighlights =
+    highlights.get(currentQuestion.number) ?? EMPTY_HIGHLIGHTS
 
   // For multiple-answer questions, require the exact number of selections
   // before the answer can be submitted.
@@ -137,6 +154,36 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
     })
   }, [currentSelected, currentQuestion])
 
+  const toggleHighlight = useCallback(
+    (key: string) => {
+      setHighlights((prev) => {
+        const next = new Map(prev)
+        const set = new Set(next.get(currentQuestion.number) ?? [])
+        if (set.has(key)) {
+          set.delete(key)
+        } else {
+          set.add(key)
+        }
+        if (set.size === 0) {
+          next.delete(currentQuestion.number)
+        } else {
+          next.set(currentQuestion.number, set)
+        }
+        return next
+      })
+    },
+    [currentQuestion.number]
+  )
+
+  const clearHighlights = useCallback(() => {
+    setHighlights((prev) => {
+      if (!prev.has(currentQuestion.number)) return prev
+      const next = new Map(prev)
+      next.delete(currentQuestion.number)
+      return next
+    })
+  }, [currentQuestion.number])
+
   const handleToggleReview = useCallback(
     (pressed: boolean) => {
       setReviewList((prev) => {
@@ -171,6 +218,7 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
     setSubmittedQuestions(new Map())
     setRetakeIndices(null)
     setReviewList(new Set())
+    setHighlights(new Map())
     setSessionKey((k) => k + 1)
   }, [])
 
@@ -186,6 +234,7 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
     setCurrentIndex(0)
     setSelectedAnswers(new Map())
     setSubmittedQuestions(new Map())
+    setHighlights(new Map())
     setSessionKey((k) => k + 1)
   }, [submittedQuestions, exam.questions])
 
@@ -196,6 +245,7 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
     setSubmittedQuestions(new Map())
     setRetakeIndices(null)
     setReviewList(new Set())
+    setHighlights(new Map())
     setSessionKey((k) => k + 1)
   }, [])
 
@@ -242,6 +292,23 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
     window.addEventListener("keydown", onKeyDown)
     return () => window.removeEventListener("keydown", onKeyDown)
   }, [autoMode, totalAnswered, totalQuestions, handleAutoAdvance])
+
+  // "H" toggles highlight mode (ignoring modifier combos and text fields).
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== "h" && e.key !== "H") return
+      if (e.metaKey || e.ctrlKey || e.altKey) return
+      const target = e.target as HTMLElement | null
+      const tag = target?.tagName
+      if (tag === "INPUT" || tag === "TEXTAREA" || target?.isContentEditable) {
+        return
+      }
+      e.preventDefault()
+      setHighlightMode((m) => !m)
+    }
+    window.addEventListener("keydown", onKeyDown)
+    return () => window.removeEventListener("keydown", onKeyDown)
+  }, [])
 
   const choiceOrder =
     choiceOrders.get(currentQuestion.number) ||
@@ -381,6 +448,23 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
               Auto
             </Label>
           </div>
+          <div className="flex items-center gap-2">
+            <Switch
+              id="highlight"
+              checked={highlightMode}
+              onCheckedChange={setHighlightMode}
+            />
+            <Label
+              htmlFor="highlight"
+              className="flex cursor-pointer items-center gap-1.5 text-sm"
+            >
+              <Highlighter className="size-3.5" />
+              Highlight
+              <kbd className="hidden rounded border bg-muted px-1.5 py-0.5 font-mono text-xs sm:inline">
+                H
+              </kbd>
+            </Label>
+          </div>
           {autoMode && !isFinished && (
             <div className="flex items-center gap-2">
               <Button size="sm" onClick={handleAutoAdvance}>
@@ -396,6 +480,26 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
             </div>
           )}
         </div>
+        {highlightMode && (
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-2 rounded-lg border border-sky-500/30 bg-sky-500/5 px-3 py-2 text-sm text-muted-foreground">
+            <span className="flex items-center gap-1.5">
+              <Highlighter className="size-3.5 text-sky-600 dark:text-sky-400" />
+              Tap words in the question or choices to highlight. Turn off to
+              answer.
+            </span>
+            {currentHighlights.size > 0 && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-7 px-2"
+                onClick={clearHighlights}
+              >
+                <Eraser data-icon="inline-start" />
+                Clear
+              </Button>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Finished Summary */}
@@ -499,6 +603,10 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
         <RichText
           text={displayQuestion}
           proseClassName="text-lg leading-relaxed font-semibold"
+          fieldKey="q"
+          highlights={currentHighlights}
+          highlightMode={highlightMode}
+          onToggleHighlight={toggleHighlight}
         />
         <p className="text-sm text-muted-foreground">
           {isMultipleAnswer
@@ -518,6 +626,10 @@ export function ExamSession({ exam, onBack }: ExamSessionProps) {
             isSubmitted={isSubmitted}
             isCorrectChoice={currentQuestion.correctAnswers.includes(choice)}
             onClick={() => handleToggleChoice(choice)}
+            fieldKey={`c${choiceOrder[i]}`}
+            highlights={currentHighlights}
+            highlightMode={highlightMode}
+            onToggleHighlight={toggleHighlight}
           />
         ))}
       </div>
@@ -721,14 +833,94 @@ function parseRichSegments(text: string): { code: boolean; text: string }[] {
   return segments
 }
 
+/**
+ * Render a prose paragraph as highlightable word tokens. `nextWord` is a
+ * mutable counter (shared across all prose segments of one field) so each word
+ * gets a stable global index — the key under which its highlight is stored.
+ * Whitespace tokens carry no index but render highlighted when they sit between
+ * two highlighted words, so a multi-word phrase reads as one continuous mark.
+ */
+function renderProseTokens(
+  text: string,
+  fieldKey: string,
+  highlights: ReadonlySet<string>,
+  highlightMode: boolean,
+  onToggleHighlight: (key: string) => void,
+  nextWord: { i: number }
+) {
+  const tokens = text.match(/\S+|\s+/g) ?? [text]
+  // First pass: assign a key to each word token and record highlight state.
+  const meta = tokens.map((tok) => {
+    if (/\S/.test(tok)) {
+      const key = `${fieldKey}:${nextWord.i++}`
+      return { tok, key, lit: highlights.has(key) }
+    }
+    return { tok, key: null as string | null, lit: false }
+  })
+
+  // A token is "lit" if it's a highlighted word, or whitespace bridging two
+  // highlighted words — so an adjacent run renders as one continuous bar.
+  const litAt = (i: number): boolean => {
+    if (i < 0 || i >= meta.length) return false
+    const m = meta[i]
+    if (m.key !== null) return m.lit
+    return Boolean(meta[i - 1]?.lit && meta[i + 1]?.lit)
+  }
+
+  return meta.map((m, ti) => {
+    const lit = litAt(ti)
+    // Round only the outer edges of a run; keep interior seams square so a
+    // multi-word phrase looks like a single highlight, not a row of pills.
+    const classes: string[] = []
+    if (lit) {
+      classes.push(HIGHLIGHT_LIT)
+      if (!litAt(ti - 1)) classes.push("rounded-l-sm")
+      if (!litAt(ti + 1)) classes.push("rounded-r-sm")
+    }
+    if (m.key !== null && highlightMode) {
+      classes.push("cursor-pointer")
+      if (!lit) classes.push(`rounded-sm ${HIGHLIGHT_HOVER}`)
+    }
+
+    const key = m.key
+    return (
+      <span
+        key={ti}
+        onClick={
+          key !== null && highlightMode
+            ? (e) => {
+                e.stopPropagation()
+                onToggleHighlight(key)
+              }
+            : undefined
+        }
+        className={classes.join(" ") || undefined}
+      >
+        {m.tok}
+      </span>
+    )
+  })
+}
+
 function RichText({
   text,
   proseClassName,
+  fieldKey,
+  highlights = EMPTY_HIGHLIGHTS,
+  highlightMode = false,
+  onToggleHighlight,
 }: {
   text: string
   proseClassName?: string
+  fieldKey?: string
+  highlights?: ReadonlySet<string>
+  highlightMode?: boolean
+  onToggleHighlight?: (key: string) => void
 }) {
   const segments = useMemo(() => parseRichSegments(text), [text])
+  const highlightable = Boolean(fieldKey && onToggleHighlight)
+  // Shared word counter across this field's prose segments.
+  const nextWord = { i: 0 }
   return (
     <>
       {segments.map((seg, i) =>
@@ -741,7 +933,16 @@ function RichText({
           </pre>
         ) : (
           <p key={i} className={proseClassName}>
-            {seg.text}
+            {highlightable
+              ? renderProseTokens(
+                  seg.text,
+                  fieldKey as string,
+                  highlights,
+                  highlightMode,
+                  onToggleHighlight as (key: string) => void,
+                  nextWord
+                )
+              : seg.text}
           </p>
         ),
       )}
@@ -756,6 +957,10 @@ function ChoiceButton({
   isSubmitted,
   isCorrectChoice,
   onClick,
+  fieldKey,
+  highlights,
+  highlightMode,
+  onToggleHighlight,
 }: {
   choiceText: string
   isMultiple: boolean
@@ -763,6 +968,10 @@ function ChoiceButton({
   isSubmitted: boolean
   isCorrectChoice: boolean
   onClick: () => void
+  fieldKey: string
+  highlights: ReadonlySet<string>
+  highlightMode: boolean
+  onToggleHighlight: (key: string) => void
 }) {
   let ringStyle = "border-border hover:border-muted-foreground/40"
   let indicatorOuter = "border-muted-foreground/40"
@@ -786,11 +995,20 @@ function ChoiceButton({
     indicatorInner = "bg-white"
   }
 
+  const cursor = highlightMode
+    ? "cursor-default"
+    : !isSubmitted
+      ? "cursor-pointer"
+      : "cursor-default"
+
   return (
     <button
-      onClick={onClick}
-      disabled={isSubmitted}
-      className={`flex w-full items-center gap-3 rounded-xl border-2 p-3 text-left transition-colors sm:gap-4 sm:p-4 ${ringStyle} ${!isSubmitted ? "cursor-pointer" : "cursor-default"}`}
+      // In highlight mode the row never selects an answer — taps land on the
+      // word spans inside. Keep it enabled even after submit so highlighting
+      // still works while reviewing the answer.
+      onClick={highlightMode ? undefined : onClick}
+      disabled={isSubmitted && !highlightMode}
+      className={`flex w-full items-center gap-3 rounded-xl border-2 p-3 text-left transition-colors sm:gap-4 sm:p-4 ${ringStyle} ${cursor}`}
     >
       {/* Radio / Checkbox indicator */}
       <span
@@ -804,7 +1022,13 @@ function ChoiceButton({
       </span>
 
       <div className="min-w-0 flex-1 space-y-1.5 text-sm">
-        <RichText text={choiceText} />
+        <RichText
+          text={choiceText}
+          fieldKey={fieldKey}
+          highlights={highlights}
+          highlightMode={highlightMode}
+          onToggleHighlight={onToggleHighlight}
+        />
       </div>
 
       {isSubmitted && isCorrectChoice && (
